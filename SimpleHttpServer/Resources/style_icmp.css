@@ -1,0 +1,296 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: montserrat;
+    box-sizing: border-box;
+  }
+  
+  body{
+    min-height: 100vh;
+    background-image: linear-gradient(120deg,#16a085,#f1c40f);
+  }
+  .header{
+    position: static;
+    height: 80px;
+    background: #34495e;
+    padding: 0 20px;
+    color: #fff;
+  }
+  .icmp_frame{
+    width: 800px;
+    min-width: 400px;
+    background: #f1f1f1;
+    height: 700px;
+    min-height: 400px;
+    padding: 80px 40px;
+    border-radius: 10px;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,15%);
+  }
+  .logo{
+    line-height: 80px;
+    float: left;
+    text-transform: uppercase;
+  }
+  
+  .menu{
+    float: right;
+    line-height: 80px;
+    font-family: "montserrat",sans-serif;
+  }
+  .menu a{
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0 10px;
+    transition: 0.4s;
+    font-family: "montserrat",sans-serif;
+  }
+  .menu a:hover
+  {
+    color: #3498db;
+  }
+  .logo{
+    line-height: 100px;
+    float: left;
+    text-transform: uppercase;
+  }
+  
+  .menu{
+    float: right;
+    line-height: 100px;
+  }
+  .menu a{
+    color: #fff;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0 10px;
+    transition: 0.4s;
+  }
+  .show-menu-btn,.hide-menu-btn{
+    transition: 0.4s;
+    font-size: 30px;
+    cursor: pointer;
+    display: none;
+  }
+  .show-menu-btn{
+    float: right;
+  }
+  .show-menu-btn i{
+    line-height: 100px;
+  }
+  .menu a:hover,
+  .show-menu-btn:hover,
+  .hide-menu-btn:hover{
+    color: #3498db;
+  }
+  
+  #chk{
+    position: absolute;
+    visibility: hidden;
+    z-index: -1111;
+  }
+  @media all and (max-width:800px) {
+    .show-menu-btn,.hide-menu-btn{
+      display: block;
+    }
+    .menu{
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      background: #333;
+      right: -100%;
+      top: 0;
+      text-align: center;
+      padding: 80px 0;
+      line-height: normal;
+      transition: 0.7s;
+      z-index: 999999999; /* form을 숨겨주는 역할*/
+    }
+    .menu a{
+      display: block;
+      padding: 20px;
+    }
+    .hide-menu-btn{
+      position: absolute;
+      top: 40px;
+      right: 40px;
+    }
+    #chk:checked ~ .menu{
+      right: 0;
+    }
+  }
+  @media all and (max-width:730px) {
+    .header{
+      width: 1000px;
+    }
+    .icmp_frame{
+      margin-left: 200px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,20%);
+    }
+  }
+  
+  
+  .icmp_frame h1{
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .icmphd{
+    border-bottom: 2px solid #adadad;
+    position: relative;
+    margin: 30px 0;
+  }
+  
+.icmphd{
+  border-bottom: 2px solid #adadad;
+  position: relative;
+  margin: 30px 0;
+}
+
+.icmphd input{
+  font-size: 15px;
+  color: #333;
+  border: none;
+  width: 100%;
+  outline: none;
+  background: none;
+  padding: 0 5px;
+  height: 40px;
+}
+
+.icmphd span::before{
+  content: attr(data-placeholder);
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  color: #adadad;
+  transform: translateY(-50%);
+  z-index: -1;
+  transition: .5s;
+}
+
+.icmphd span::after{
+  content: '';
+  position: absolute;
+  width: 0%;
+  height: 2px;
+top: 4vh;
+left: 0vh;
+  background: linear-gradient(120deg,#16a085,#f1c40f);
+ -ms-transform: translate(-283px,2000%);
+ -moz-transform: translate(-281px,2000%);
+  transition: .5s;
+}
+
+.focus + span::before{
+  top: -5px;
+}
+.focus + span::after{
+  width: 100%;
+}
+
+.frame_submit{
+  display: block;
+  width: 100%;
+  height: 50px;
+  border: none;
+  background: linear-gradient(120deg,#16a085,#f1c40f,#16a085);
+  background-size: 200%;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: .5s;
+  position: relative;
+  top: -72px;
+}
+
+.frame_submit:hover{
+  background-position: right;
+}
+
+/*===================================================================*/
+#ICMP_Type{
+  position: relative;
+  width: 24%;
+}
+#ICMP_Code{
+  position: relative;
+  width: 24%;
+  top: -72px;
+  left: 180px;
+
+}
+#ICMP_Checksum{
+  position: relative;
+  width: 48%;
+  top: -144px;
+  left: 358px;
+
+}
+#ICMP_ID{
+  position: relative;
+  width: 48%;
+  top: -144px;
+
+}
+#ICMP_Seq{
+  position: relative;
+  width: 48%;
+  top: -216px;
+  left: 358px;
+
+}
+#ICMP_Data{
+  position: relative;
+  width: 98%;
+  top: -216px;
+
+}
+/*===================================================================*/
+
+.icmphd:hover {
+	position: relative;
+}
+.icmphd:after {
+	transition: bottom .3s ease-in-out, opacity .3s ease-in-out;
+	background-color: rgba(0, 0, 0, 0.8);
+	box-shadow: 0px 0px 3px 1px rgba(50, 50, 50, 0.4);
+	border-radius: 5px;
+	
+  color: #FFFFFF;
+	font-size: 12px;
+	margin-bottom: 10px;
+	padding: 7px 12px;
+  position: absolute;
+  height: auto;
+	width: auto;
+	min-width: 150px;
+  min-height: 10px;
+	word-wrap: break-word;
+
+	z-index: 9999;
+
+	opacity: 0;
+	left: -9999px;
+  top: 90%;
+  
+  content: var(--tooltip-string);
+  white-space: pre;
+  /*CSS \A (���Ⱑ ���ԵǾ�� ������ ��)*/
+}
+
+.icmphd:hover:after {
+	top: 130%;
+	left: 0;
+	opacity: 1;
+}
+.arphd:hover:after {
+	top: 130%;
+	left: 0;
+	opacity: 1;
+}

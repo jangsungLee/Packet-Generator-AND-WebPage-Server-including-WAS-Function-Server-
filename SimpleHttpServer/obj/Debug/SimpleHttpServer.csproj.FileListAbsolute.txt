@@ -1,0 +1,14 @@
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\Debug\SimpleHttpServer.csprojAssemblyReference.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\Debug\SimpleHttpServer.Properties.Resources.resources
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\Debug\SimpleHttpServer.csproj.GenerateResource.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\Debug\SimpleHttpServer.csproj.CoreCompileInputs.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Debug\Resources\Pages\404.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Debug\Resources\Pages\500.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Debug\SimpleHttpServer.dll.config
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Debug\SimpleHttpServer.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Debug\SimpleHttpServer.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Debug\log4net.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Debug\log4net.xml
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\Debug\SimpleHttpServer.csproj.CopyComplete
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\Debug\SimpleHttpServer.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\Debug\SimpleHttpServer.pdb

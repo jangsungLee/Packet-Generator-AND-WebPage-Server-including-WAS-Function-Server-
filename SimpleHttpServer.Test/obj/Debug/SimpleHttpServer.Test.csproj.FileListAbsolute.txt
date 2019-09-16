@@ -1,0 +1,16 @@
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\Resources\Pages\404.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\Resources\Pages\500.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\SimpleHttpServer.Test.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\SimpleHttpServer.Test.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\SimpleHttpServer.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\log4net.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\SimpleHttpServer.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\SimpleHttpServer.dll.config
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\log4net.xml
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\bin\Debug\ko\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\obj\Debug\SimpleHttpServer.Test.csprojAssemblyReference.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\obj\Debug\SimpleHttpServer.Test.csproj.CoreCompileInputs.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\obj\Debug\SimpleHttpServer.Test.csproj.CopyComplete
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\obj\Debug\SimpleHttpServer.Test.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.Test\obj\Debug\SimpleHttpServer.Test.pdb

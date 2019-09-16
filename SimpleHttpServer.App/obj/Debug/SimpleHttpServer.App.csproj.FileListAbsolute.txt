@@ -1,0 +1,15 @@
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\Resources\Pages\404.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\Resources\Pages\500.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\SimpleHttpServer.App.exe.config
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\SimpleHttpServer.App.exe
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\SimpleHttpServer.App.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\log4net.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\SimpleHttpServer.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\SimpleHttpServer.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\SimpleHttpServer.dll.config
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\bin\Debug\log4net.xml
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\obj\Debug\SimpleHttpServer.App.csprojAssemblyReference.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\obj\Debug\SimpleHttpServer.App.csproj.CoreCompileInputs.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\obj\Debug\SimpleHttpServer.App.csproj.CopyComplete
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\obj\Debug\SimpleHttpServer.App.exe
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.App\obj\Debug\SimpleHttpServer.App.pdb

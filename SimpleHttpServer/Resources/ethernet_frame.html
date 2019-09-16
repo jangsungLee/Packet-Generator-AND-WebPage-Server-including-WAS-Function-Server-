@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="kr" >
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="style_ether.css">
+        <script src="jquery-3.4.1.min.js" charset="utf-8"></script>
+        <tag autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+        <link rel="stylesheet" href="fontawsome.css"> <!--this enabled when it can't access fontawesome web site-->
+    </head>
+    <body>
+        <div class="header">
+            <h2 class="logo" style="--tooltip-string: '제작자 : 안동대학교 정보통신공학과 15학번 김태훈\A  ';">ANU I.C.E Packet Maker</h2>
+            <input type="checkbox" id="chk">
+            <label for="chk" class="show-menu-btn">
+              <i class="fas fa-ellipsis-h"></i>
+            </label>
+                
+                <ul class="menu">
+                    <a href="ip_frame.html">IP헤더</a>
+                    <a href="arp_frame.html">ARP헤더</a>
+                    <label for="chk" class="hide-menu-btn">
+                      <i class="fas fa-times"></i>
+                    </label>    
+                </ul>
+            </div>
+            
+        <noscript>
+            <font color="white">
+            이 사이트의 기능을 모두 활성하기 위해서는 자바스크립트를 활성화 시킬 필요가 있습니다.
+            <a href="https://www.enable-javascript.com/ko/">브라우저에서 자바스크립트를 활성화하는 방법</a>을 참고하세요.
+            </font>
+        </noscript>
+            
+         <form action="ip_frame.html" method="GET" class="ether_frame">
+
+            <h1>이더넷 프레임</h1>
+            
+            <div class="etherhd"> <!--Can't Write-->
+                    <input type="text" disabled> 
+                    <span data-placeholder="이더넷 Preamble - 자동 입력됨"></span>
+            </div>
+
+            <div class="etherhd"> <!--Can't Write-->
+                <input type="text" disabled> 
+                <span data-placeholder="이더넷 SFD - 자동 입력됨"></span>
+            </div>
+
+            <div class="etherhd" style="--tooltip-string: '목적지 주소를 입력하지면 됩니다. \A 해당값은 16진수 값으로 입력됩니다.';">
+                <input type="text" name="dst" maxlength="17" id="dst" onkeydown="filterMAC(event)">
+                <span data-placeholder="이더넷 목적지 MAC"></span>
+                
+            </div>
+
+            <div class="etherhd" style="--tooltip-string: '목적지 주소를 입력하지면 됩니다. \A 해당값은 16진수 값으로 입력됩니다.';">
+                <input type="text" maxlength="17" id="src" onkeydown="filterMAC(event)">
+                <span data-placeholder="이더넷 출발지 MAC"></span>
+            </div>
+
+            <div class="etherhd" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다';">
+                <input type="text" maxlength="7" id="type_len" onkeydown="filterNumberH(event)">
+                <span data-placeholder="이더넷 헤더의 유형/길이"></span>
+            </div>
+
+            <div class="etherhd" style="--tooltip-string: '이더넷 헤더의 유형 값이 IP나 ARP일 경우\A 이더넷 데이터가 비워져있으면 해당 헤더를\A 작성하는 페이지로 넘어갑니다.\A \A 입력하는 모든 값은 문자로 인식됩니다.\A 예를 들어 \'0\'을 입력했더라도, \'0\'의 아스키코드 값인 \'48\'으로 입력됩니다';"> <!--etherhd_TL의 값에 따라 text 또는 button으로 바뀜-->
+                <input type="text"id="data">
+                <span data-placeholder="이더넷 데이터"></span>
+            </div>
+
+            <div class="etherhd"> <!--Can't Write-->
+                <input type="text" disabled> 
+                <span data-placeholder="이더넷 FCS - 자동 입력됨"></span>
+            </div>
+
+            <input type="button" class="frame_submit" value="확인" onclick="sumit_button()">
+        </form>
+
+            <script type="text/javascript">
+
+                function isNeedFocus()
+                {
+                    if($("#dst").val().length>0)
+                    {
+                        $("#dst").focus();
+                        $("#dst").focus();
+                    }
+                    if($("#src").val().length>0)
+                    {
+                        $("#src").focus();
+                        $("#src").focus();
+                    }
+                    if($("#type_len").val().length>0)
+                    {
+                        $("#type_len").focus();
+                        $("#type_len").focus();
+                    }
+                    if($("#data").val().length>0)
+                    {
+                        $("#data").focus();
+                        $("#data").focus();
+                    }
+                }
+
+                var WAS_PORTNUM="3001";
+                var WebSocket_URL= "ws://127.0.0.1:"+WAS_PORTNUM//"ws://windowsdesktop.iptime.org:8080";
+                $(document).ready(function() {
+                        if ( (navigator.userAgent.toLowerCase().search( "edge/" ) > -1 ||
+                        /*IE*/(navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (navigator.userAgent.toLowerCase().indexOf("msie") != -1)))
+                        alert("해당 브라우저는 정상적으로 동작하지 않을 수 있습니다.");
+                        
+                      fill_INPUT_Field();
+
+                      if(window.location.hostname.length>0)
+                        WebSocket_URL="ws://"+window.location.hostname+":"+WAS_PORTNUM;
+
+                      
+
+                      isNeedFocus();
+                   
+            });
+            
+                $(".etherhd input").on("focus",function(){
+                  $(this).addClass("focus");
+                });
+          
+                $(".etherhd input").on("blur",function(){
+                  if($(this).val() == "")
+                  $(this).removeClass("focus");
+                });
+
+            function fill_INPUT_Field()
+            {
+                var ip_num_str;
+                if(sessionStorage.getItem("key_etherHD")!=null)
+                {
+                    ip_num_str=sessionStorage.getItem("key_etherHD").replace(/(\s*)/g,"");
+                    ip_num_str=ip_num_str.split(",");
+                    $("#dst").val(ip_num_str[0]);
+                    $("#src").val(ip_num_str[1]);
+                    $("#type_len").val(ip_num_str[2]);
+                    $("#data").val(ip_num_str[3]);
+                }
+            }
+
+
+            var prev_keyID;
+            function filterNumberH(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+              else if(event.target.value.length==1 && keyID==88) // check whether it will be '0x'
+                {
+                    // None
+                }
+                else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+                {
+                    // None
+                }
+                else if(event.target.value.slice(0,2)=="0x" && (64<keyID && keyID<71)) // 16진수로 인식
+                {
+                    event.target.value = event.target.value.replace(/[a]/g, "A");
+                    event.target.value = event.target.value.replace(/[b]/g, "B");
+                    event.target.value = event.target.value.replace(/[c]/g, "C");
+                    event.target.value = event.target.value.replace(/[d]/g, "D");
+                    event.target.value = event.target.value.replace(/[e]/g, "E");
+                    event.target.value = event.target.value.replace(/[f]/g, "F");
+                    event.target.value="0x"+event.target.value.slice(2,event.target.value.length).replace(/[^0-9 | ^A-F]/g, "")
+                    //alert(event.target.value.slice(2,event.target.value.length).replace(/[^0-9]/g, ""));
+                }
+                else
+                    event.preventDefault();
+                 
+              
+
+                prev_keyID=keyID;
+            }
+
+            function filterMAC(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+              {
+                    // None
+              }
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106) || (64<keyID && keyID<71))
+              {
+                  event.target.value = event.target.value.replace(/[a]/g, "A");
+                  event.target.value = event.target.value.replace(/[b]/g, "B");
+                  event.target.value = event.target.value.replace(/[c]/g, "C");
+                  event.target.value = event.target.value.replace(/[d]/g, "D");
+                  event.target.value = event.target.value.replace(/[e]/g, "E");
+                  event.target.value = event.target.value.replace(/[f]/g, "F");
+                  event.target.value = event.target.value.replace(/[^0-9 | ^A-F | ^-]/g, "");
+              }
+                else
+                    event.preventDefault();
+                    
+              switch(event.target.value.length)
+              {
+                case 2:
+                    event.target.value=event.target.value+"-";
+                    break;
+                case 5:
+                    event.target.value=event.target.value+"-";
+                    break
+                case 8:
+                    event.target.value=event.target.value+"-";
+                    break
+                case 11:
+                    event.target.value=event.target.value+"-";
+                    break
+                case 14:
+                    event.target.value=event.target.value+"-";
+                    break
+              }
+              prev_keyID=keyID;
+            }
+
+            // 작업 예정내용
+            // Data input태그를 제외한 모든 input태그에 입력값을 채우도록 사용자에게 알리고 다쓸때까지 전송하지않고 버티기
+            // --> 입력안된것을 표시하려고 할 필요가 없는 이유가 이미 입력된 값에 focus처리를 해서 색을 바꾸어주는 것을 만들었기때문이다.
+            // 데이터 수집, 데이터 전송(WebSocket Connect, 수집한 데이터 알아서 처리해서 전송)
+            // type값이 IP 또는 ARP이면 Data input태그 숨기고 나머지 input태그값 받아온후 다음페이지에 작업 넘기기
+            // *******Session Storage를 사용해서 얻은 장점은 기존에 작성한 값을 default로 설정해줄수있어서 사용자는 다른페이지에 있다가 또다시 ethernet헤더페이지부터 시작해야할 필요가 없다는 점이다.********
+            // *******또한 key이름이 같더라도 탭별로 데이터가 구별된다.*******************************************************************************************************************************
+            // WAS가 끝났다면 location.href의 .html확장자를 지우고 웹컨테이너 서버를 만들기
+            var ws;
+            var isWebSocketConnected=false; // 페이지를 벗어날때, WebSocket종료시 엣지브라우저에서 'WebSocket Error'가 일어나는 것을 해결하기 위한 데이터
+            var isWindowUnload=false;
+            var isToldError_when_occured=false;
+            window.onbeforeunload=function(e){
+                isWindowUnload=true;
+                ws.close();
+                //return '페이지를 나가시겠습니까?';
+            };
+
+            function WebSocket_Connect()
+            {
+                ws=new WebSocket(WebSocket_URL);
+                ws.onopen = WebSocket_onOpen;
+                ws.onmessage = Websocket_onMessage;
+                ws.onclose = WebSocket_onClose;
+                ws.onerror = WebSocket_onError;
+                isToldError_when_occured=false;
+            }
+            function WebSocket_onOpen(e)
+            {
+                //txtRecv.append( "connected<br>" );
+                isWebSocketConnected=true;
+                alert("connected");
+
+                
+                ws.send(strTobyte_buffer); // 처음 연결할때 데이터를 전송하는 부분
+            }
+            
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function(e) {
+                alert(e.srcElement.result)
+            });
+            function Websocket_onMessage(e)
+            {
+                if(e.data instanceof Blob)
+                    reader.readAsText(e.data);
+                else
+                    alert(e.data);
+            }
+            function WebSocket_onClose(e)
+            {
+                isWebSocketConnected=false;
+                //alert("closed");
+            }
+            function WebSocket_onError(e)
+            {
+                if(!isWebSocketConnected && !isToldError_when_occured)
+                {
+                    alert("There are some problems at WAS.\nPlease retry later.");
+                    isToldError_when_occured=true;
+                }
+                isWebSocketConnected=false;
+            }
+
+            var isAllInput=false;
+            function checkAllInput()
+            {
+                if($("#dst").val().split("-").length<6)
+                {
+                    isAllInput=false;
+                    if($("#dst").val().length<1)
+                        alert("목적지 MAC을 입력해주세요");
+                    else
+                        alert("목적지 MAC을 제대로 입력해주세요");
+                    return;
+                }
+                
+                if($("#src").val().split("-").length<6)
+                {
+                    isAllInput=false;
+                    if($("#src").val().length<1)
+                        alert("출발지 MAC을 입력해주세요");
+                    else
+                        alert("출발지 MAC을 제대로 입력해주세요");
+                    return;
+                }
+                if($("#type_len").val().length<1)
+                {
+                    isAllInput=false;
+                    alert("유형/길이를 입력해주세요");
+                    return;
+                }
+                else if(isNaN(parseInt($("#type_len").val())))
+                {
+                    isAllInput=false;
+                    alert("유형/길이를 제대로 입력해주세요");
+                    return;
+                }
+
+
+                sessionStorage.setItem("key_etherHD", $("#dst").val()+", "+$("#src").val()+", "+$("#type_len").val());
+
+                isAllInput=true;
+            }
+
+            var strTobyte_buffer_len=6+6+2;
+            var strTobyte_buffer=new Uint8Array(strTobyte_buffer_len);
+            function numTobyte(value, dst_index, byte_size)
+            {
+                var i;
+                for(i=0;i<byte_size;i++)
+                {
+                    strTobyte_buffer[dst_index + byte_size - (i + 1)]=((value>>(8*i))&0xff);
+                }
+            }
+            function strTonum_etherHD()
+            {
+                var num_str;
+                var mac_address_str;
+                var i;
+                
+                if(sessionStorage.getItem("key_etherHD")!=null)
+                {
+                    num_str=sessionStorage.getItem("key_etherHD").replace(/(\s*)/g,"").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("이더넷 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+
+
+                mac_address_str=num_str[0].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[i]=parseInt("0x"+mac_address_str[i]);
+                mac_address_str=num_str[1].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[6+i]=parseInt("0x"+mac_address_str[i]);
+                numTobyte(parseInt(num_str[2]),12, 2);
+            }
+
+            function sumit_button()
+            {
+                var i;
+                
+                checkAllInput();
+                if(!isAllInput)
+                    return;
+                else
+                    strTonum_etherHD();
+
+                
+                
+                if($("#data").val().length>0)
+                {
+                    var data_byte_buffer;
+                    
+                    var Data_var;
+                    var STRhex;
+
+                    if($("#data").val().split("0x").length>1)
+                    {
+
+                        STRhex=$("#data").val().split("0x");
+                        for(i=0;i<STRhex.length;i++)
+                            STRhex[i]=STRhex[i].replace(/(\s*)/g,"");
+                        Data_var=new Array(STRhex.length-1);
+                        for(i=1;i<STRhex.length;i++)
+                            Data_var[i-1]=STRhex[i];
+                                
+                            //String길이가 3이상을 잘라서 이동시키는 작업
+                        var Uint8Array_length, k;
+                        for(i=0,Uint8Array_length=0;i<Data_var.length;i++)
+                            Uint8Array_length+=(parseInt(Data_var[i].length/2)+parseInt(Data_var[i].length%2));
+                        STRhex=new Uint8Array(Uint8Array_length);
+                        for(i=0,Uint8Array_length=0;i<Data_var.length;i++)
+                        {   
+                            if(Data_var[i].length<2)
+                            {
+                                
+                                        
+                                if(isNaN(parseInt("0x"+Data_var[i].slice(0,1))))
+                                {
+                                    alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   2");
+                                    return;
+                                }
+                                STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(0,1));
+                                Uint8Array_length++;
+                            }
+                            else
+                            {
+                                for(k=0;k<parseInt(Data_var[i].length/2);k++)
+                                {
+                                    if(isNaN(parseInt("0x"+Data_var[i].slice(k*2,k*2+2))))
+                                    {
+                                        alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   2");
+                                        return;
+                                    }
+
+                                    STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(k*2,k*2+2));
+                                    Uint8Array_length++;
+                                }
+
+                                if(Data_var[i].length%2==1) // 홀수길이일때 마지막 값 처리
+                                {
+                                    if(isNaN(parseInt("0x"+Data_var[i].slice(k*2,k*2+1))))
+                                    {
+                                        alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   1   -> "+STRhex[Uint8Array_length+k]);
+                                        return;
+                                    }
+                                                
+                                    STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(k*2,k*2+1));
+                                    Uint8Array_length++;
+                                }
+                            }                         
+                        }
+
+                        Data_var=STRhex;
+                                
+                    }
+                    else
+                    {
+                        Data_var=new Uint8Array($("#data").val().length);
+                        for(i=0;i<$("#data").val().length;i++)
+                            Data_var[i]=$("#data").val().charCodeAt(i);
+                    }
+
+                    data_byte_buffer=new Uint8Array(strTobyte_buffer_len+Data_var.length);
+                    for(i=0;i<strTobyte_buffer_len;i++)
+                        data_byte_buffer[i]=strTobyte_buffer[i];
+                    for(i=0;i<Data_var.length;i++)
+                        data_byte_buffer[strTobyte_buffer_len+i]=Data_var[i];
+                    strTobyte_buffer=data_byte_buffer;
+
+                    console.log(strTobyte_buffer);
+                    
+                    
+                    strTobyte_buffer=data_byte_buffer;
+                    if(!isWebSocketConnected)
+                    {
+                        WebSocket_Connect();
+                    }
+                        
+                    if(isWebSocketConnected)
+                     {
+                        ws.send(strTobyte_buffer);
+                     }   
+                }
+                else
+                    switch(parseInt($("#type_len").val()))
+                    {
+                        case 0x0800:
+                            // SessionStoarge에 저장하고 IP페이지로 이동(IP페이지한테 작업 맡기기)
+                            location.href = "ip_frame.html";
+                            break;
+                        case 0x0806:
+                            // SessionStoarge에 저장하고 ARP페이지로 이동(ARP페이지한테 작업 맡기기)
+                            location.href = "arp_frame.html";
+                            break;
+                    }
+                
+            }
+            </script>
+
+
+    </body>
+</html>

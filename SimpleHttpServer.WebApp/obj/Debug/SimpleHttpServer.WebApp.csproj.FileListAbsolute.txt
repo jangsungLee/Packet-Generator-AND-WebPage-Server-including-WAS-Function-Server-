@@ -1,0 +1,15 @@
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\Resources\Pages\404.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\Resources\Pages\500.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\WebContainerServer.exe.config
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\WebContainerServer.exe
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\WebContainerServer.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\SimpleHttpServer.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\log4net.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\SimpleHttpServer.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\SimpleHttpServer.dll.config
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\bin\Debug\log4net.xml
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\obj\Debug\SimpleHttpServer.WebApp.csprojAssemblyReference.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\obj\Debug\SimpleHttpServer.WebApp.csproj.CoreCompileInputs.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\obj\Debug\SimpleHttpServer.WebApp.csproj.CopyComplete
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\obj\Debug\WebContainerServer.exe
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer.WebApp\obj\Debug\WebContainerServer.pdb

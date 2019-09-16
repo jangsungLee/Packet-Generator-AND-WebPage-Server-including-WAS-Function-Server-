@@ -1,0 +1,14 @@
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Release\Resources\Pages\404.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Release\Resources\Pages\500.html
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Release\SimpleHttpServer.dll.config
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Release\SimpleHttpServer.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Release\SimpleHttpServer.pdb
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Release\log4net.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\bin\Release\log4net.xml
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\x86\Release\SimpleHttpServer.csprojAssemblyReference.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\x86\Release\SimpleHttpServer.Properties.Resources.resources
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\x86\Release\SimpleHttpServer.csproj.GenerateResource.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\x86\Release\SimpleHttpServer.csproj.CoreCompileInputs.cache
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\x86\Release\SimpleHttpServer.csproj.CopyComplete
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\x86\Release\SimpleHttpServer.dll
+C:\Users\hoan1\Desktop\Packet-Generator-AND-WebPage-Server-including-WAS-Function-Server--master\SimpleHttpServer\obj\x86\Release\SimpleHttpServer.pdb

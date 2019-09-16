@@ -1,0 +1,4 @@
+﻿  test.cpp
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(372,16): warning C4018:  '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(393,13): warning C4101:  'j' :참조되지 않은 지역 변수입니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\packet_generator.h(4,10): error C1083:  포함 파일을 열 수 없습니다. 'pcap.h': No such file or directory

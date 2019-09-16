@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="kr" >
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="style_dns.css">
+        <script src="jquery-3.4.1.min.js" charset="utf-8"></script>
+        <tag autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+        <link rel="stylesheet" href="fontawsome.css"> <!--this enabled when it can't access fontawesome web site-->
+    </head>
+    <body>
+        
+        <noscript>
+            <font color="white">
+            이 사이트의 기능을 모두 활성하기 위해서는 자바스크립트를 활성화 시킬 필요가 있습니다.
+            <a href="https://www.enable-javascript.com/ko/">브라우저에서 자바스크립트를 활성화하는 방법</a>을 참고하세요.
+            </font>
+        </noscript>
+        <div class="header">
+            <h2 class="logo" style="--tooltip-string: '제작자 : 안동대학교 정보통신공학과 15학번 김태훈\A  ';">ANU I.C.E Packet Maker</h2>
+            <input type="checkbox" id="chk">
+            <label for="chk" class="show-menu-btn">
+              <i class="fas fa-ellipsis-h"></i>
+            </label>
+                    
+            <ul class="menu">
+                <a href="ethernet_frame.html">ETHERNET헤더</a>
+                <a href="ip_frame.html">IP헤더</a>
+                <a href="tcp_frame.html">TCP헤더</a> 
+                <a href="udp_frame.html">UDP헤더</a>
+                <label for="chk" class="hide-menu-btn">
+                  <i class="fas fa-times"></i>
+                </label>    
+            </ul>
+        </div>
+        
+                    
+         <form action="index.html" class="dns_frame">
+            <h1>DNS 헤더</h1>
+            
+            <div class="dnshd" id="DNS_Transaction" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="0" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Transaction"></span>
+                
+            </div>
+
+            <div class="dnshd" id="DNS_Flags" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="1" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Flags"></span>
+            </div>
+
+            <div class="dnshd" id="DNS_Question_Record_Number" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="2" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Question Record Number"></span>
+            </div>
+
+            <div class="dnshd" id="DNS_Answer_Record_Number" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="3" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Answer Record Number"></span>
+            </div>
+
+            <div class="dnshd" id="DNS_Nameserver_Record_Number" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="4" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Nameserver Record Number"></span>
+            </div>
+
+            <div class="dnshd" id="DNS_Addtional_Record_Number" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="5" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Addtional Record Number"></span>
+            </div>
+
+            <div class="dnshd" id="DNS_Query_name" style="--tooltip-string: '문자열의 길이는 16진수(\'0x\'사용하지않음)로 인식됩니다.\A 그리고 어느정도 수준까지는 입력이 제대로 되었는지 확인은 해줍니다.\A  \A  ';">
+                <input type="text" id="6">
+                <span data-placeholder="DNS Query Name String"></span> <!--space bar으로 구분하고, 인덱스가 홀수이면 String길이, 짝수이면 String으로 인식-->
+            </div>
+
+            <div class="dnshd" id="DNS_Query_Type" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="7" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Query Type"></span>
+            </div>
+
+            <div class="dnshd" id="DNS_Query_Class" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="8" maxlength="6" onkeydown="filterNumber(event)">
+                <span data-placeholder="DNS Query Class"></span>
+            </div>
+
+            <input type="button"  class="frame_submit" value="확인" onclick="sumit_button()">
+        </form>
+
+            <script type="text/javascript">
+                var WAS_PORTNUM="3001";
+                var WebSocket_URL= "ws://127.0.0.1:"+WAS_PORTNUM//"ws://windowsdesktop.iptime.org:8080";
+                $(document).ready(function() {
+                //    if ( navigator.userAgent.toLowerCase().search( "edge/" ) > -1 ||
+                //     (/*IE*/(navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (navigator.userAgent.toLowerCase().indexOf("msie") != -1)) )
+                //      alert("해당 브라우저는 정상적으로 동작하지 않을 수 있습니다.");
+
+                    if(window.location.hostname.length>0)
+                      WebSocket_URL="ws://"+window.location.hostname+":"+WAS_PORTNUM;
+
+                    fill_INPUT_Field();
+
+                    
+                    
+                      if($("#DNS_Transaction input").val().length>0)
+                    {
+                        $("#DNS_Transaction input").focus();//alert("연결");
+                        $("#DNS_Transaction input").focus();
+                    }
+                    if($("#DNS_Flags input").val().length>0)
+                    {
+                        $("#DNS_Flags input").focus();
+                        $("#DNS_Flags input").focus();
+                    }
+                    if($("#DNS_Question_Record_Number input").val().length>0)
+                    {
+                        $("#DNS_Question_Record_Number input").focus();
+                        $("#DNS_Question_Record_Number input").focus();
+                    }
+                    if($("#DNS_Answer_Record_Number input").val().length>0)
+                    {
+                        $("#DNS_Answer_Record_Number input").focus();
+                        $("#DNS_Answer_Record_Number input").focus();
+                    }
+                    
+                    if($("#DNS_Nameserver_Record_Number input").val().length>0)
+                    {
+                        $("#DNS_Nameserver_Record_Number input").focus();//alert("연결");
+                        $("#DNS_Nameserver_Record_Number input").focus();
+                    }
+                    if($("#DNS_Addtional_Record_Number input").val().length>0)
+                    {
+                        $("#DNS_Addtional_Record_Number input").focus();
+                        $("#DNS_Addtional_Record_Number input").focus();
+                    }
+                    if($("#DNS_Query_name input").val().length>0)
+                    {
+                        $("#DNS_Query_name input").focus();
+                        $("#DNS_Query_name input").focus();
+                    }
+                    if($("#DNS_Query_Type input").val().length>0)
+                    {
+                        $("#DNS_Query_Type input").focus();
+                        $("#DNS_Query_Type input").focus();
+                    }
+                    if($("#DNS_Query_Class input").val().length>0)
+                    {
+                        $("#DNS_Query_Class input").focus();
+                        $("#DNS_Query_Class input").focus();
+                    }
+            });
+
+                $(".dnshd input").on("focus",function(){
+                  $(this).addClass("focus");
+                });
+          
+                $(".dnshd input").on("blur",function(){
+                  if($(this).val() == "")
+                  $(this).removeClass("focus");
+                });
+          
+                $(".dnshd input").keydown(function(key) {
+                if (key.keyCode == 13) {
+                    var str=sumit_button(parseInt(key.target.id));
+                    $(str).select();
+                }
+            });
+
+            function fill_INPUT_Field()
+            {
+                var dns_num_str;
+
+                if(sessionStorage.getItem("key_dnsHD")!=null)
+                {
+                    dns_num_str=sessionStorage.getItem("key_dnsHD").replace(/(\s*)/g,"").split(",");
+                    $("#DNS_Transaction input").val(dns_num_str[0]);
+                    $("#DNS_Flags input").val(dns_num_str[1]);
+                    $("#DNS_Question_Record_Number input").val(dns_num_str[2]);
+                    $("#DNS_Answer_Record_Number input").val(dns_num_str[3]);
+                    $("#DNS_Nameserver_Record_Number input").val(dns_num_str[4]);
+                    $("#DNS_Addtional_Record_Number input").val(dns_num_str[5]);
+                    $("#DNS_Query_Type input").val(dns_num_str[6]);
+                    $("#IP_Checksum input").val(dns_num_str[7]);
+                    $("#DNS_Query_Class input").val(dns_num_str[8]);
+                }
+                if(sessionStorage.getItem("key_dnsQueryName")!=null)
+                {$("#DNS_Query_name input").val(sessionStorage.getItem("key_dnsQueryName"));
+                }
+            }
+
+            var prev_keyID;
+            function filterNumber(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+             else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+             {
+                 // None
+             }
+             else 
+                event.preventDefault();
+                
+             prev_keyID=keyID;
+            }
+            function filterNumberH(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+              else if(event.target.value.length==1 && keyID==88) // check whether it will be '0x'
+                {
+                    // None
+                }
+                else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+                {
+                    // None
+                }
+                else if(event.target.value.slice(0,2)=="0x" && (64<keyID && keyID<71)) // 16진수로 인식
+                {
+                    event.target.value = event.target.value.replace(/[a]/g, "A");
+                    event.target.value = event.target.value.replace(/[b]/g, "B");
+                    event.target.value = event.target.value.replace(/[c]/g, "C");
+                    event.target.value = event.target.value.replace(/[d]/g, "D");
+                    event.target.value = event.target.value.replace(/[e]/g, "E");
+                    event.target.value = event.target.value.replace(/[f]/g, "F");
+                    event.target.value="0x"+event.target.value.slice(2,event.target.value.length).replace(/[^0-9 | ^A-F]/g, "")
+                    //alert(event.target.value.slice(2,event.target.value.length).replace(/[^0-9]/g, ""));
+                }
+                else
+                    event.preventDefault();
+                
+              
+                /*if(event.target.value.slice(0,2)=="0x" || prev_keyID==17) // 16진수로 인식, Ctrl+v를 대비해서 16진수로 준비시킴
+                {
+                    $("#"+event.target.getAttribute('id')).attr("maxlength",6);
+                    //alert("16진수로 인식합니다.");
+                }
+                else // 10진수로 인식
+                {
+                    $("#"+event.target.getAttribute('id')).attr("maxlength",5);
+                    //alert("10진수로 인식합니다.");
+                }*/
+             prev_keyID=keyID;
+            }
+
+            var ws;
+            var isWebSocketConnected=false; // 페이지를 벗어날때, WebSocket종료시 엣지브라우저에서 'WebSocket Error'가 일어나는 것을 해결하기 위한 데이터
+            var isWindowUnload=false;
+            var isToldError_when_occured=false;
+            window.onbeforeunload=function(e){
+                isWindowUnload=true;
+                ws.close();
+                //return '페이지를 나가시겠습니까?';
+            };
+
+            function WebSocket_Connect()
+            {
+                ws=new WebSocket(WebSocket_URL);
+                ws.onopen = WebSocket_onOpen;
+                ws.onmessage = Websocket_onMessage;
+                ws.onclose = WebSocket_onClose;
+                ws.onerror = WebSocket_onError;
+                isToldError_when_occured=false;
+            }
+            function WebSocket_onOpen(e)
+            {
+                //txtRecv.append( "connected<br>" );
+                isWebSocketConnected=true;
+                //alert("connected");
+
+                
+                ws.send(strTobyte_buffer); // 처음 연결할때 데이터를 전송하는 부분
+            }
+
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function(e) {
+                alert(e.srcElement.result)
+            });
+            function Websocket_onMessage(e)
+            {
+                if(e.data instanceof Blob)
+                    reader.readAsText(e.data);
+                else
+                    alert(e.data);
+            }
+            function WebSocket_onClose(e)
+            {
+                isWebSocketConnected=false;
+                //alert("closed");
+            }
+            function WebSocket_onError(e)
+            {
+                if(!isWebSocketConnected && !isToldError_when_occured)
+                {
+                    alert("There are some problems at WAS.\nPlease retry later.");
+                    isToldError_when_occured=true;
+                }
+                isWebSocketConnected=false;
+            }
+            var isAllInput=false;
+            function checkAllInput(index)
+            {
+                switch(index)
+                {
+                    
+                case 0:
+                    if($("#DNS_Transaction input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Transaction을 입력해주세요");
+                        return "#DNS_Transaction input";
+                    }
+                case 1:
+                    if($("#DNS_Flags input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Flags을 입력해주세요");
+                        return "#DNS_Flags input";
+                    }
+                case 2:
+                    if($("#DNS_Question_Record_Number input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Question Record Number을 입력해주세요");
+                        return "#DNS_Question_Record_Number input";
+                    }
+                case 3:
+                    if($("#DNS_Answer_Record_Number input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Answer Record Number을 입력해주세요");
+                        return "#DNS_Answer_Record_Number input";
+                    }
+                case 4:
+                    if($("#DNS_Nameserver_Record_Number input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Nameserver Record Number를 입력해주세요");
+                        return "#DNS_Nameserver_Record_Number input";
+                    }
+                case 5:
+                    if($("#DNS_Addtional_Record_Number input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Addtional Record Number을 입력해주세요");
+                        return "#DNS_Addtional_Record_Number input";
+                    }
+                case 6:
+                    if($("#DNS_Query_name input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Query Name String을 입력해주세요");
+                        return "#DNS_Query_name input";
+                    }
+                case 7:
+                    if($("#DNS_Query_Type input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Query Type를 입력해주세요");
+                        return "#DNS_Query_Type input";
+                    }
+                case 8:
+                    if($("#DNS_Query_Class input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("DNS Query Clas을 입력해주세요");
+                        return "#DNS_Query_Class input";
+                    }
+                }
+                
+                if(index!=0)
+                {
+                    var return_value;
+                    if((return_value=checkAllInput(0))!=null)
+                        return return_value;
+                    else
+                    {
+                        isAllInput=true;
+                    }
+                }
+                else
+                {
+                        isAllInput=true;
+                }
+                
+                return null;
+            }
+
+            var strTobyte_buffer_len=14+20+20+14/* + DNS Query Name len*/;
+            var strTobyte_buffer=new Uint8Array(strTobyte_buffer_len);
+            function numTobyte(value, dst_index, byte_size)
+            {
+                var i;
+                for(i=0;i<byte_size;i++)
+                {
+                    strTobyte_buffer[dst_index + byte_size - (i + 1)]=((value>>(8*i))&0xff);
+                }
+            }
+            function sum_for_checksum(dst_index, size)
+            {
+                var sum = new Uint32Array(1);
+                var i;
+                for (i = 0, sum[0]= 0; i < size; i += 2)
+                {
+                    sum[0] += ((strTobyte_buffer[dst_index + i]<<8) | ((i + 1<size)?strTobyte_buffer[dst_index + i + 1]:0));
+                    while ((sum[0] & 0xffff0000))
+                        sum[0] = ((sum[0] & 0xffff0000) >> 16) + (sum[0] & 0xffff);
+
+                }
+                return sum[0];
+            }
+            function strTonum_etherHD()
+            {
+                var num_str;
+                var mac_address_str;
+                var i;
+
+                if(sessionStorage.getItem("key_etherHD")!=null)
+                {
+                    num_str=sessionStorage.getItem("key_etherHD").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("이더넷 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+
+
+                mac_address_str=num_str[0].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[i]=parseInt("0x"+mac_address_str[i]);
+                mac_address_str=num_str[1].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[6+i]=parseInt("0x"+mac_address_str[i]);
+                numTobyte(parseInt(num_str[2]),12, 2);
+            }
+            var ip_num_str;
+            function strTonum_ipHD()
+            {
+                var ip_address_str;
+                var i;
+                
+                if(sessionStorage.getItem("key_ipHD")!=null)
+                {
+                    ip_num_str=sessionStorage.getItem("key_ipHD").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("IP 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+                strTobyte_buffer[14]=((parseInt(ip_num_str[0])<<4) | parseInt(ip_num_str[1]));
+                strTobyte_buffer[15]=parseInt(ip_num_str[2]);
+                numTobyte(parseInt(ip_num_str[3]), 16, 2);
+                numTobyte(parseInt(ip_num_str[4]), 18, 2);
+                numTobyte(parseInt(ip_num_str[5]), 20, 2);
+                strTobyte_buffer[22]=parseInt(ip_num_str[6]);
+                strTobyte_buffer[23]=parseInt(ip_num_str[7]);
+                numTobyte(parseInt(ip_num_str[8]), 24, 2);
+                ip_address_str=ip_num_str[9].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[26+i]=parseInt(ip_address_str[i]);
+                ip_address_str=ip_num_str[10].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[30+i]=parseInt(ip_address_str[i]);
+            }
+            function strTonum_tcpHD()
+            {
+                var num_str;
+                var i;
+                
+                if(sessionStorage.getItem("key_tcpHD")!=null)
+                {
+                    num_str=sessionStorage.getItem("key_tcpHD").split(",");
+                    numTobyte(parseInt(num_str[0]),34,2);
+                    numTobyte(parseInt(num_str[1]),36,2);
+                    numTobyte(parseInt(num_str[2]),38,4);
+                    numTobyte(parseInt(num_str[3]),42,4);
+                    strTobyte_buffer[46]=(parseInt(num_str[4])<<4);// (HLEN | Reserved)
+                    strTobyte_buffer[47]=parseInt(num_str[5]);
+                    numTobyte(parseInt(num_str[6]),48,2);
+                    numTobyte(parseInt(num_str[7]),50,2);
+                    numTobyte(parseInt(num_str[8]),52,2);
+
+
+
+
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("TCP 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+            }
+            function strTonum_udpHD()
+            {
+                var num_str;
+                var i;
+                
+                if(sessionStorage.getItem("key_udpHD")!=null)
+                {
+                    num_str=($("#UDP_DST_Port input").val()+","+$("#UDP_SRC_Port input").val()
+                        +","+$("#UDP_LEN input").val()+","+$("#UDP_Checksum input").val()).split(",");
+                        numTobyte(parseInt(num_str[0]),34,2);
+                    numTobyte(parseInt(num_str[1]),36,2);
+                    numTobyte(parseInt(num_str[2]),38,2);
+                    numTobyte(parseInt(num_str[3]),40,2);
+
+
+
+
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("UDP 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+            }
+            function strTonum_dnsHD()
+            {
+                var num_str;
+                var i;
+                    num_str=($("#DNS_Transaction input").val()+","+$("#DNS_Flags input").val()+","+$("#DNS_Question_Record_Number input").val()+","+$("#DNS_Answer_Record_Number input").val()
+                    +","+$("#DNS_Nameserver_Record_Number input").val()+","+$("#DNS_Addtional_Record_Number input").val()+","+$("#DNS_Query_name input").val()+","
+                    +$("#DNS_Query_Type input").val()+","+$("#DNS_Query_Class input").val()).replace(/(\s*)/g,"").split(",");
+                    
+                    
+                    // 아직 안바꿈
+                    numTobyte(parseInt(num_str[0]),54,2);
+                    numTobyte(parseInt(num_str[1]),56,2);
+                    numTobyte(parseInt(num_str[3]),58,2);
+                    numTobyte(parseInt(num_str[4]),60,2);
+                    numTobyte(parseInt(num_str[5]),62,2);
+                    // DNS Query Name String은 submit_button함수에서 넣을 것이고 그 아래의 필드데이터는 쉬프트작업을 거칠것임.
+                    numTobyte(parseInt(num_str[7]),64,2);
+                    numTobyte(parseInt(num_str[8]),66,2);
+                    isAllInput=true;
+            }
+            function sumit_button(index)
+            {
+                var i;
+                var sum=new Uint32Array(1);
+                
+                if(index)
+                    return_value=checkAllInput(index);
+                else
+                    return_value=checkAllInput(0);
+                
+                
+                if(!isAllInput)
+                    return return_value;
+                else
+                {
+                    strTonum_etherHD();
+                    if(isAllInput)
+                        strTonum_ipHD();
+                    if(isAllInput)
+                        if(sessionStorage.getItem("key_ipCapule")=="TCP")
+                        {
+                            strTonum_tcpHD();
+                        }
+                        else if(sessionStorage.getItem("key_ipCapule")=="UDP")
+                        {
+                            strTonum_udpHD(); // 아직 안적음
+                        }
+                        else
+                        {
+                               alert("TCP헤더 또는 UDP헤더를 작성해주세요.");
+                               return;
+                        }
+                    if(isAllInput)
+                        strTonum_dnsHD();
+                    if(isAllInput)
+                    {
+                            var k,dns_query_name_total_len,j;$("#DNS_Query_name input").val();
+                            var dns_query_name=new Uint8Array($("#DNS_Query_name input").val().length);
+
+                            
+                            if(isNaN(parseInt("0x"+$("#DNS_Query_name input").val().slice(0,1)))) // 한글은 2바이트?
+                            {
+                                alert("DNS Query Name에서 첫번째 문자열의 길이가 잘못입력되었습니다.");
+                                return;
+                            }
+                            else
+                            {
+                                dns_query_name[0]=parseInt("0x"+$("#DNS_Query_name input").val().slice(0,1));
+                                dns_query_name_total_len=dns_query_name[0]+1;
+                            }
+                                for(i=1,k=0,j=2;i<dns_query_name.length;i++)
+                                {
+                                    if(i==dns_query_name_total_len)
+                                    {
+                                        if(isNaN(parseInt("0x"+$("#DNS_Query_name input").val().slice(i,i+1))))
+                                        {
+                                            alert("DNS Query Name에서 "+j+"번째 문자열의 길이(column : "+(i+1)+")가 잘못입력되었습니다.");
+                                            return;
+                                        }
+
+                                        k+=i+1;
+                                        dns_query_name[i]=parseInt("0x"+$("#DNS_Query_name input").val().slice(i,i+1));
+                                        dns_query_name_total_len+=dns_query_name[i]+1;
+                                    }
+                                    else
+                                    {
+                                        dns_query_name[i]=$("#DNS_Query_name input").val().charCodeAt(i);
+                                    }
+                                }
+                                
+                                // 예외처리
+                                if(i!=dns_query_name_total_len)
+                                {
+                                    alert("DNS Query Name에서 지정한 문자열의 길이와 맞지않습니다. 확인하고 다시 입력해주세요 \ndns query name total len : "+dns_query_name_total_len);
+                                    return;
+                                }
+
+
+                            var data_byte_buffer=new Uint8Array(strTobyte_buffer_len+dns_query_name.length);
+                            var shift_byte_buffer=new Uint8Array(4);
+                            for(i=0;i<64;i++)
+                                data_byte_buffer[i]=strTobyte_buffer[i];
+                            for(i=0;i<4;i++)
+                                shift_byte_buffer[i]=strTobyte_buffer[64+i];
+                            for(i=0;i<dns_query_name.length;i++)//DNS Query Name + 구분자때문에 replace를 사용하기에는 애매한 부분이 있음. 예를 들어 URL이 'blog.naver.com/안녕 내 이름은'인 경우 제대로 처리가 안됨
+                                data_byte_buffer[64+i]=dns_query_name[i];
+                            for(k=0;k<4;k++)
+                                data_byte_buffer[64+i+k]=shift_byte_buffer[k];
+                            strTobyte_buffer=data_byte_buffer;
+
+                            // IP Total Length
+                            if(strTobyte_buffer[16]==0 && strTobyte_buffer[17]==0)
+                            {
+                                var ip_total_length=(strTobyte_buffer.length-14);
+                                numTobyte(ip_total_length,16,2);
+                                sessionStorage.setItem("key_ipHD_total_len", "1,1,"+ip_total_length);
+                                numTobyte(ip_total_length, 16, 2);
+                            }
+
+                            // IP Checksum
+                            if(strTobyte_buffer[24]==0 && strTobyte_buffer[25]==0)
+                            {
+                                sum[0] = sum_for_checksum(14, strTobyte_buffer.length - 14);
+                                sum[0]=~sum[0];
+                                checksum_uint16[0]=sum[0];
+                                if(sessionStorage.getItem("key_ipHD_user_checksum").split(",")[0]=="1" )
+                                    sessionStorage.setItem("key_ipHD_user_checksum", "1,1,"+checksum_uint16[0]);
+                            }
+                            else
+                                checksum_uint16[0]=parseInt(ip_num_str[8]);
+                            numTobyte(checksum_uint16[0], 24, 2);
+                            
+
+
+                            console.log(strTobyte_buffer);
+
+                            
+                            if(!isWebSocketConnected)
+                            {
+                                WebSocket_Connect();
+                            }
+                                
+                            if(isWebSocketConnected)
+                            {
+                                ws.send(strTobyte_buffer);
+                            }
+                        
+
+                        
+                    }
+                }
+                        sessionStorage.setItem("key_dnsHD",$("#DNS_Transaction input").val()+","+$("#DNS_Flags input").val()+","+$("#DNS_Question_Record_Number input").val()
+                        +","+$("#DNS_Answer_Record_Number input").val()+","+$("#DNS_Nameserver_Record_Number input").val()+","+$("#DNS_Addtional_Record_Number input").val()
+                        +","+$("#DNS_Query_Type input").val()+","+","+$("#DNS_Query_Class input").val());
+                        sessionStorage.setItem("key_dnsQueryName",$("#DNS_Query_name input").val());
+            }
+            </script>
+
+
+    </body>
+</html>

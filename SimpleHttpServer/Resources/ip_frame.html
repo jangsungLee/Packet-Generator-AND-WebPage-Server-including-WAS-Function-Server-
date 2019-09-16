@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="kr" >
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="style_ip.css">
+        <script src="jquery-3.4.1.min.js" charset="utf-8"></script>
+        <tag autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+        <link rel="stylesheet" href="fontawsome.css"> <!--this enabled when it can't access fontawesome web site-->
+    </head>
+    <body>
+            <div class="header">
+                <h2 class="logo" style="--tooltip-string: '제작자 : 안동대학교 정보통신공학과 15학번 김태훈\A  ';">ANU I.C.E Packet Maker</h2>
+                <input type="checkbox" id="chk">
+                <label for="chk" class="show-menu-btn">
+                  <i class="fas fa-ellipsis-h"></i>
+                </label>
+                        
+                <ul class="menu">
+                    <a href="ethernet_frame.html">ETHERNET헤더</a>
+                    <a href="tcp_frame.html">TCP헤더</a>
+                    <a href="udp_frame.html">UDP헤더</a>
+                    <a href="icmp_frame.html">ICMP헤더</a>
+                    <label for="chk" class="hide-menu-btn">
+                      <i class="fas fa-times"></i>
+                    </label>    
+                </ul>
+            </div>
+
+        <noscript>
+                <font color="white">
+                이 사이트의 기능을 모두 활성하기 위해서는 자바스크립트를 활성화 시킬 필요가 있습니다.
+                <a href="https://www.enable-javascript.com/ko/">브라우저에서 자바스크립트를 활성화하는 방법</a>을 참고하세요.
+                </font>
+        </noscript>
+                
+         <form action="index.html" class="ip_frame">
+            <h1>IP 헤더</h1>
+            
+            <div class="iphd" id="IPVer" style="--tooltip-string: 'IP Version 4 or IP Version 6\A  ';">
+                <input type="text" maxlength="1"  id="0" onkeydown="filterVER(event)">
+                <span data-placeholder="IP Version"></span>
+                
+            </div>
+
+            <div class="iphd" id="IP_HLEN" style="--tooltip-string: '범위 5~9를 입력할 수 있습니다.\A 물론 현재 제작된 페이지는 고정된 헤더형태이지만, 프로토콜이 무엇인지 이해를 돕기 위해 가변값을 입력할 수 있도록 만들었습니다.\A  ';">
+                <input type="text" maxlength="1"  id="1"  onkeydown="filterHL(event)">
+                <span data-placeholder="IP HLEN"></span>
+            </div>
+
+            <div class="iphd" id="IP_TOS" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" maxlength="3" id="2"  onkeydown="filterNumber(event)">
+                <span data-placeholder="IP Type of Service"></span>
+            </div>
+
+            <div class="iphd" id="IP_Total_Length" style="--tooltip-string: '입력값이 \'0\'일경우, 자동으로 계산됩니다.\A  ';">
+                <input type="text" maxlength="6" id="3" onkeydown="filterNumberH(event)">
+                <span data-placeholder="IP Total Length"></span>
+            </div>
+
+            <div class="iphd" id="IP_ID" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" maxlength="6" id="4" onkeydown="filterNumberH(event)">
+                <span data-placeholder="IP Identification"></span>
+            </div>
+
+            <div class="iphd" id="IP_Flags" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" maxlength="6" id="5" onkeydown="filterNumberH(event)">
+                <span data-placeholder="IP Flags(including fragment offset)"></span>
+            </div>
+
+            <div class="iphd" id="IP_TTL" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" maxlength="3" id="6"  onkeydown="filterNumber(event)">
+                <span data-placeholder="IP TTL"></span>
+            </div>
+
+            <div class="iphd" id="IP_Protocol" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" maxlength="3" id="7" onkeydown="filterNumber(event)">
+                <span data-placeholder="IP Protocol"></span>
+            </div>
+
+            <div class="iphd" id="IP_Checksum" style="--tooltip-string: '입력값이 \'0\'이면서 IP데이터 또는 ICMP헤더를 작성한 경우, 자동으로 계산됩니다.\A  ';">
+                <input type="text" maxlength="6" id="8" onkeydown="filterNumberH(event)"> <!--Hexa값 입력 가능-->
+                <span data-placeholder="IP Checksum"></span>
+            </div>
+
+            <div class="iphd" id="IP_SA" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" maxlength="15" id="9"  onkeydown="filterIP(event)">
+                <span data-placeholder="IP Source Address"></span>
+            </div>
+
+            <div class="iphd" id="IP_DA" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" maxlength="15" id="10"  onkeydown="filterIP(event)">
+                <span data-placeholder="IP Destination Address"></span>
+            </div>
+
+            <div class="iphd" id="IP_Data" style="--tooltip-string: '이 필드가 비워져있고 동시에 Protocol값이 1(ICMP), 6(TCP), 17(UDP)에 해당된다면, 해당 해더를 작성하는 페이지로 넘어갑니다.\A 입력하는 모든 값은 문자로 인식됩니다.\A 예를 들어 \'0\'을 입력했더라도, \'0\'의 아스키코드 값인 \'48\'으로 입력됩니다\A  \A  \A  만약 숫자를 바이트값으로 입력하고 싶다면 \'0x\'와 함께 16진수로 입력하시면 됩니다.\A  ''';">
+                <input type="text">
+                <span data-placeholder="IP Data"></span>
+            </div>
+
+
+            <input type="button" class="frame_submit" value="확인" onclick="sumit_button()">
+        </form>
+
+            <script type="text/javascript">
+                var WAS_PORTNUM="3001";
+                var WebSocket_URL= "ws://127.0.0.1:"+WAS_PORTNUM//"ws://windowsdesktop.iptime.org:8080";
+                $(document).ready(function() {
+                   // if ( (navigator.userAgent.toLowerCase().search( "edge/" ) > -1 ||
+                   //  /*IE*/(navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (navigator.userAgent.toLowerCase().indexOf("msie") != -1)))
+                   //   alert("해당 브라우저는 정상적으로 동작하지 않을 수 있습니다.");
+
+                      
+                    if(window.location.hostname.length>0)
+                        WebSocket_URL="ws://"+window.location.hostname+":"+WAS_PORTNUM;
+                
+                    fill_INPUT_Field();
+
+                    if(sessionStorage.getItem("key_ipHD_user_checksum")!=null)
+                        if(sessionStorage.getItem("key_ipHD_user_checksum").split(",")[0]=="1" && sessionStorage.getItem("key_ipHD_user_checksum").split(",")[1]=="1")
+                            $("#IP_Checksum input").val("0x"+parseInt(sessionStorage.getItem("key_ipHD_user_checksum").split(",")[2]).toString(16));
+                    if(sessionStorage.getItem("key_ipHD_total_len")!=null)
+                        if(sessionStorage.getItem("key_ipHD_total_len").split(",")[0]=="1" && sessionStorage.getItem("key_ipHD_total_len").split(",")[1]=="1")
+                            $("#IP_Total_Length input").val("0x"+parseInt(sessionStorage.getItem("key_ipHD_total_len").split(",")[2]).toString(16));
+                    
+
+                    if($("#IPVer input").val().length>0)
+                    {
+                        $("#IPVer input").focus();
+                        $("#IPVer input").focus();
+                    }
+                    if($("#IP_HLEN input").val().length>0)
+                    {
+                        $("#IP_HLEN input").focus();
+                        $("#IP_HLEN input").focus();
+                    }
+                    if($("#IP_TOS input").val().length>0)
+                    {
+                        $("#IP_TOS input").focus();
+                        $("#IP_TOS input").focus();
+                    }
+                    if($("#IP_Total_Length input").val().length>0)
+                    {
+                        $("#IP_Total_Length input").focus();
+                        $("#IP_Total_Length input").focus();
+                    }
+                    if($("#IP_ID input").val().length>0)
+                    {
+                        $("#IP_ID input").focus();
+                        $("#IP_ID input").focus();
+                    }
+                    if($("#IP_Flags input").val().length>0)
+                    {
+                        $("#IP_Flags input").focus();
+                        $("#IP_Flags input").focus();
+                    }
+                    if($("#IP_TTL input").val().length>0)
+                    {
+                        $("#IP_TTL input").focus();
+                        $("#IP_TTL input").focus();
+                    }
+                    if($("#IP_Protocol input").val().length>0)
+                    {
+                        $("#IP_Protocol input").focus();
+                        $("#IP_Protocol input").focus();
+                    }
+                    if($("#IP_Checksum input").val().length>0)
+                    {
+                        $("#IP_Checksum input").focus();
+                        $("#IP_Checksum input").focus();
+                    }
+                    if($("#IP_SA input").val().length>0)
+                    {
+                        $("#IP_SA input").focus();
+                        $("#IP_SA input").focus();
+                    }
+                    if($("#IP_DA input").val().length>0)
+                    {
+                        $("#IP_DA input").focus();
+                        $("#IP_DA input").focus();
+                    }
+                    if($("#IP_Data input").val().length>0)
+                    {
+                        $("#IP_Data input").focus();
+                        $("#IP_Data input").focus();
+                    }
+
+            });
+
+                $(".iphd input").on("focus",function(){
+                  $(this).addClass("focus");
+                });
+          
+                $(".iphd input").on("blur",function(){
+                  if($(this).val() == "")
+                  $(this).removeClass("focus");
+                });
+                
+            
+                $(".iphd input").keydown(function(key) {
+                if (key.keyCode == 13) {
+                    var str=sumit_button(parseInt(key.target.id));
+                    $(str).select();
+                }
+            });
+
+            function fill_INPUT_Field()
+            {
+                var ip_num_str;
+
+                if(sessionStorage.getItem("key_ipHD")!=null)
+                {
+                    ip_num_str=sessionStorage.getItem("key_ipHD").replace(/(\s*)/g,"");
+                    ip_num_str=ip_num_str.split(",");
+                    $("#IPVer input").val(ip_num_str[0]);
+                    $("#IP_HLEN input").val(ip_num_str[1]);
+                    $("#IP_TOS input").val(ip_num_str[2]);
+                    $("#IP_Total_Length input").val(ip_num_str[3]);
+                    $("#IP_ID input").val(ip_num_str[4]);
+                    $("#IP_Flags input").val(ip_num_str[5]);
+                    $("#IP_TTL input").val(ip_num_str[6]);
+                    $("#IP_Protocol input").val(ip_num_str[7]);
+                    $("#IP_Checksum input").val(ip_num_str[8]);
+                    $("#IP_SA input").val(ip_num_str[9]);
+                    $("#IP_DA input").val(ip_num_str[10]);
+                    $("#IP_Data input").val(sessionStorage.getItem("key_ipHD_Data"));
+                }
+            }
+
+          
+            var prev_keyID;
+            function filterNumber(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+             else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+             {
+                 // None
+             }
+             else 
+                event.preventDefault();
+                
+             prev_keyID=keyID;
+            }
+            function filterNumberH(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+              else if(event.target.value.length==1 && keyID==88) // check whether it will be '0x'
+                {
+                    // None
+                }
+                else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+                {
+                    // None
+                }
+                else if(event.target.value.slice(0,2)=="0x" && (64<keyID && keyID<71)) // 16진수로 인식
+                {
+                    event.target.value = event.target.value.replace(/[a]/g, "A");
+                    event.target.value = event.target.value.replace(/[b]/g, "B");
+                    event.target.value = event.target.value.replace(/[c]/g, "C");
+                    event.target.value = event.target.value.replace(/[d]/g, "D");
+                    event.target.value = event.target.value.replace(/[e]/g, "E");
+                    event.target.value = event.target.value.replace(/[f]/g, "F");
+                    event.target.value="0x"+event.target.value.slice(2,event.target.value.length).replace(/[^0-9 | ^A-F]/g, "")
+                    //alert(event.target.value.slice(2,event.target.value.length).replace(/[^0-9]/g, ""));
+                }
+                else
+                    event.preventDefault();
+                
+              
+                /*if(event.target.value.slice(0,2)=="0x" || prev_keyID==17) // 16진수로 인식, Ctrl+v를 대비해서 16진수로 준비시킴
+                {
+                    $("#"+event.target.getAttribute('id')).attr("maxlength",6);
+                    //alert("16진수로 인식합니다.");
+                }
+                else // 10진수로 인식
+                {
+                    $("#"+event.target.getAttribute('id')).attr("maxlength",5);
+                    //alert("10진수로 인식합니다.");
+                }*/
+             prev_keyID=keyID;
+            }
+            function filterVER(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+              {
+                  // None
+              }
+              else if((keyID==52 || keyID==100) || (keyID==54 || keyID==102))
+              {
+                  // None
+              }
+              else
+                event.preventDefault();
+             prev_keyID=keyID;
+            }
+            function filterHL(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+              {
+                  // None
+              }
+              else if((52<keyID && keyID<58) || (100<keyID && keyID<106))
+              {
+                  // None
+              }
+              else 
+                event.preventDefault();
+             prev_keyID=keyID;
+            }
+            function filterIP(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+              {
+                  // None
+              }
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106) || keyID==190)
+              {
+                  // None
+              }
+              else 
+                event.preventDefault();
+             prev_keyID=keyID;
+            }
+
+            var ws;
+            var isWebSocketConnected=false; // 페이지를 벗어날때, WebSocket종료시 엣지브라우저에서 'WebSocket Error'가 일어나는 것을 해결하기 위한 데이터
+            var isWindowUnload=false;
+            var isToldError_when_occured=false;
+            window.onbeforeunload=function(e){
+                isWindowUnload=true;
+                ws.close();
+                //return '페이지를 나가시겠습니까?';
+            };
+
+            function WebSocket_Connect()
+            {
+                ws=new WebSocket(WebSocket_URL);
+                ws.onopen = WebSocket_onOpen;
+                ws.onmessage = Websocket_onMessage;
+                ws.onclose = WebSocket_onClose;
+                ws.onerror = WebSocket_onError;
+                isToldError_when_occured=false;
+            }
+            function WebSocket_onOpen(e)
+            {
+                //txtRecv.append( "connected<br>" );
+                isWebSocketConnected=true;
+                //alert("connected");
+
+                
+                ws.send(strTobyte_buffer); // 처음 연결할때 데이터를 전송하는 부분
+            }
+
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function(e) {
+                alert(e.srcElement.result)
+            });
+            function Websocket_onMessage(e)
+            {
+                if(e.data instanceof Blob)
+                    reader.readAsText(e.data);
+                else
+                    alert(e.data);
+            }
+            function WebSocket_onClose(e)
+            {
+                isWebSocketConnected=false;
+                //alert("closed");
+            }
+            function WebSocket_onError(e)
+            {
+                if(!isWebSocketConnected && !isToldError_when_occured)
+                {
+                    alert("There are some problems at WAS.\nPlease retry later.");
+                    isToldError_when_occured=true;
+                }
+                isWebSocketConnected=false;
+            }
+
+            
+            var isAllInput=false;
+            function checkAllInput(index)
+            {
+                switch(index)
+                {
+                case 0:
+                    if($("#IPVer input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP Version을 입력해주세요");
+                        return "#IPVer input";
+                    }
+                case 1:
+                    if($("#IP_HLEN input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP HLEN을 입력해주세요");
+                        return "#IP_HLEN input";
+                    }
+                case 2:
+                    if($("#IP_TOS input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP TOS을 입력해주세요");
+                        return "#IP_TOS input";
+                    }
+                case 3:
+                    if($("#IP_Total_Length input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP Total Length를 입력해주세요");
+                        return "#IP_Total_Length input";
+                    }
+                    else if(isNaN(parseInt($("#IP_Total_Length input").val())))
+                    {
+                        isAllInput=false;
+                        alert("IP Total Length를 제대로 입력해주세요");
+                        return "#IP_Total_Length input";
+                    }
+                case 4:
+                    if($("#IP_ID input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP Identification을 입력해주세요");
+                        return "#IP_ID input";
+                    }
+                    else if(isNaN(parseInt($("#IP_ID input").val())))
+                    {
+                        isAllInput=false;
+                        alert("IP Identification을 제대로 입력해주세요");
+                        return "#IP_ID input";
+                    }
+                case 5:
+                    if($("#IP_Flags input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP Flags를 입력해주세요");
+                        return "#IP_Flags input";
+                    }
+                    else if(isNaN(parseInt($("#IP_Flags input").val())))
+                    {
+                        isAllInput=false;
+                        alert("IP Flags를 제대로 입력해주세요");
+                        return "#IP_Flags input";
+                    }
+                case 6:
+                    if($("#IP_TTL input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP TTL을 입력해주세요");
+                        return "#IP_TTL input";
+                    }
+                case 7:
+                    if($("#IP_Protocol input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP Protocol을 입력해주세요");
+                        return "#IP_Protocol input";
+                    }
+                case 8:
+                    if($("#IP_Checksum input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("IP Checksum을 입력해주세요");
+                        return "#IP_Checksum input";
+                    }
+                    else if(isNaN(parseInt($("#IP_Checksum input").val())))
+                    {
+                        isAllInput=false;
+                        alert("IP Checksum을 제대로 입력해주세요");
+                        return "#IP_Checksum input";
+                    }
+                case 9:
+                    if($("#IP_SA input").val().split(".").length!=4)
+                    {
+                        isAllInput=false;
+                        if($("#IP_SA input").val().length<1)
+                            alert("IP Source Address를 입력해주세요");
+                        else
+                            alert("IP Source Address를 제대로 입력해주세요");
+                        return "#IP_SA input"; 
+                    }
+                case 10:
+                    if($("#IP_DA input").val().split(".").length!=4)
+                    {
+                        isAllInput=false;
+                        if($("#IP_DA input").val().length<1)
+                            alert("IP Destination Address를 입력해주세요");
+                        else
+                            alert("IP Destination Address를 제대로 입력해주세요");
+                        return "#IP_DA input";
+                    }
+                }
+
+                if(index!=0)
+                {
+                    var return_value;
+                    if((return_value=checkAllInput(0))!=null)
+                        return return_value;
+                    else
+                    {
+                        isAllInput=true;
+                    }
+                }
+                else
+                {
+                        isAllInput=true;
+                }
+                
+                return null;
+            }
+
+            var strTobyte_buffer_len=14+20;
+            var strTobyte_buffer=new Uint8Array(strTobyte_buffer_len);
+            function numTobyte(value, dst_index, byte_size)
+            {
+                var i;
+                for(i=0;i<byte_size;i++)
+                {
+                    strTobyte_buffer[dst_index + byte_size - (i + 1)]=((value>>(8*i))&0xff);
+                }
+            }
+            function strTonum_etherHD()
+            {
+                var num_str;
+                var mac_address_str;
+                var i;
+
+                if(sessionStorage.getItem("key_etherHD")!=null)
+                {
+                    num_str=sessionStorage.getItem("key_etherHD").replace(/(\s*)/g,"").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("이더넷 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+
+
+                mac_address_str=num_str[0].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[i]=parseInt("0x"+mac_address_str[i]);
+                mac_address_str=num_str[1].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[6+i]=parseInt("0x"+mac_address_str[i]);
+                numTobyte(parseInt(num_str[2]),12, 2);
+            }
+            var ip_num_str;
+            function strTonum_ipHD()
+            {
+                var ip_address_str;
+                var i;
+                
+                ip_num_str=($("#IPVer input").val()+
+                        ","+$("#IP_HLEN input").val()+","+$("#IP_TOS input").val()
+                        +","+$("#IP_Total_Length input").val()+","+$("#IP_ID input").val()
+                        +","+$("#IP_Flags input").val()+","+$("#IP_TTL input").val()
+                        +","+$("#IP_Protocol input").val()+","+$("#IP_Checksum input").val()
+                        +","+$("#IP_SA input").val()+","+$("#IP_DA input").val()).split(",");
+                isAllInput=true;
+                strTobyte_buffer[14]=((parseInt(ip_num_str[0])<<4) | parseInt(ip_num_str[1]));
+                strTobyte_buffer[15]=parseInt(ip_num_str[2]);
+                numTobyte(parseInt(ip_num_str[3]), 16, 2);
+                numTobyte(parseInt(ip_num_str[4]), 18, 2);
+                numTobyte(parseInt(ip_num_str[5]), 20, 2);
+                strTobyte_buffer[22]=parseInt(ip_num_str[6]);
+                strTobyte_buffer[23]=parseInt(ip_num_str[7]);
+                numTobyte(parseInt(ip_num_str[8]), 24, 2);
+                ip_address_str=ip_num_str[9].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[26+i]=parseInt(ip_address_str[i]);
+                ip_address_str=ip_num_str[10].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[30+i]=parseInt(ip_address_str[i]);
+            }
+            function sumit_button(index)
+            {
+                var i;
+                var return_value;
+                var sum=new Uint32Array(1);
+                
+
+                if(index)
+                    return_value=checkAllInput(index);
+                else
+                    return_value=checkAllInput(0);
+                
+                if(!isAllInput)
+                    return return_value;
+                else
+                {
+                    strTonum_etherHD();
+                    if(isAllInput)
+                        strTonum_ipHD();
+                    if(isAllInput)
+                    {
+                        var save_string;
+                        if(strTobyte_buffer[16]==0 && strTobyte_buffer[17]==0)
+                            sessionStorage.setItem("key_ipHD_total_len", "1,0");
+                        else
+                            sessionStorage.setItem("key_ipHD_total_len", "0,0"); // do not read
+                        // IP체크섬 범위는 IP Data를 제외한 모든 범위이다. 이렇게 하면 다른 페이지에서 가져와서 사용할 수 있다.
+                       {
+                           
+                            
+                        }
+                        ip_num_str[8]="0x"+sum[0].toString(16);
+                        
+                        save_string="";
+                        for(i=0;i<ip_num_str.length;i++)
+                            save_string+=ip_num_str[i]+(i!=(ip_num_str.length-1)?", ":"");
+                        sessionStorage.setItem("key_ipHD", save_string);
+                        
+                        if(strTobyte_buffer[24]==0 && strTobyte_buffer[25]==0) // checksum(no rid of overflow)
+                        {
+                            sessionStorage.setItem("key_ipHD_user_checksum", "1,0");
+                        }
+                        else
+                            sessionStorage.setItem("key_ipHD_user_checksum", "0,0");
+
+
+                        
+                        if($("#IP_Data input").val().length>0)
+                        {
+                            var data_byte_buffer;
+                            var ip_total_length;
+                            var checksum_uint16=new Uint16Array(1);
+                            
+                            var Data_var;
+                            var STRhex;
+
+                            if($("#IP_Data input").val().split("0x").length>1)
+                            {
+
+                                STRhex=$("#IP_Data input").val().split("0x");
+                                for(i=0;i<STRhex.length;i++)
+                                    STRhex[i]=STRhex[i].replace(/(\s*)/g,"");
+                                Data_var=new Array(STRhex.length-1);
+                                for(i=1;i<STRhex.length;i++)
+                                    Data_var[i-1]=STRhex[i];
+                                        
+                                    //String길이가 3이상을 잘라서 이동시키는 작업
+                                var Uint8Array_length, k;
+                                for(i=0,Uint8Array_length=0;i<Data_var.length;i++)
+                                    Uint8Array_length+=(parseInt(Data_var[i].length/2)+parseInt(Data_var[i].length%2));
+                                STRhex=new Uint8Array(Uint8Array_length);
+                                for(i=0,Uint8Array_length=0;i<Data_var.length;i++)
+                                {   
+                                    if(Data_var[i].length<2)
+                                    {
+                                        if(isNaN(parseInt("0x"+Data_var[i].slice(0,1))))
+                                        {
+                                            alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   2");
+                                            return;
+                                        }
+                                        STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(0,1));
+                                        Uint8Array_length++;
+                                    }
+                                    else
+                                    {
+                                        for(k=0;k<parseInt(Data_var[i].length/2);k++)
+                                        {   
+                                            if(isNaN(parseInt("0x"+Data_var[i].slice(k*2,k*2+2))))
+                                            {
+                                                alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   2");
+                                                return;
+                                            }
+                                            STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(k*2,k*2+2));
+                                            Uint8Array_length++;
+                                        }
+
+                                        if(Data_var[i].length%2==1) // 홀수길이일때 마지막 값 처리
+                                        {
+                                            if(isNaN(parseInt("0x"+Data_var[i].slice(k*2,k*2+1))))
+                                            {
+                                                alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   1   -> "+STRhex[Uint8Array_length+k]);
+                                                return;
+                                            }
+                                            STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(k*2,k*2+1));
+                                            Uint8Array_length++;
+                                        }
+                                    }                         
+                                }
+
+                                Data_var=STRhex;
+                                        
+                            }
+                            else
+                            {
+                                Data_var=new Uint8Array($("#IP_Data input").val().length);
+                                for(i=0;i<$("#IP_Data input").val().length;i++)
+                                    Data_var[i]=$("#IP_Data input").val().charCodeAt(i);
+                            }
+
+
+                            data_byte_buffer=new Uint8Array(strTobyte_buffer_len+Data_var.length);
+                            ip_total_len=20+Data_var.length;
+
+                            for(i=0;i<strTobyte_buffer_len;i++)
+                                data_byte_buffer[i]=strTobyte_buffer[i];
+                            for(i=0;i<Data_var.length;i++)
+                                data_byte_buffer[strTobyte_buffer_len+i]=Data_var[i];
+                            strTobyte_buffer=data_byte_buffer;
+
+
+
+
+
+
+
+
+                            if(strTobyte_buffer[16]==0 && strTobyte_buffer[17]==0) // Total length
+                            {
+                                $("#IP_Total_Length input").val("0x"+ip_total_len.toString(16));
+                                numTobyte(ip_total_len, 16, 2);
+                            }
+                            if(strTobyte_buffer[24]==0 && strTobyte_buffer[25]==0) // checksum
+                            {
+                                strTobyte_buffer[24]=0;
+                                strTobyte_buffer[25]=0;
+                                for(i=0, sum[0]=0;i<ip_total_len;i+=2)
+                                    sum[0]+=((strTobyte_buffer[14 + i] << 8) | strTobyte_buffer[/*14 + i + 1*/15 + i]);
+                               while ((sum[0] & 0xffff0000))
+                                    sum[0] = ((sum[0] & 0xffff0000) >> 16) + (sum[0] & 0xffff);
+                                sum[0]=~sum[0];
+                                checksum_uint16[0]=sum[0];
+                                numTobyte(checksum_uint16[0], 24, 2);
+                                $("#IP_Checksum input").val("0x"+checksum_uint16[0].toString(16));
+                            }
+                            sessionStorage.setItem("key_ipHD_user_checksum", "1,0");
+                            sessionStorage.setItem("key_ipHD_total_len", "1,0");
+
+
+
+
+
+
+
+                            console.log(strTobyte_buffer);
+
+                            if(!isWebSocketConnected)
+                            {
+                                WebSocket_Connect();
+                            }
+                                
+                            if(isWebSocketConnected)
+                            {
+                                ws.send(strTobyte_buffer);
+                            }
+                        }
+                        else
+                        {
+                            switch(strTobyte_buffer[23])
+                            {
+                                case 1:
+                                    // SessionStoarge에 저장하고 ICMP페이지로 이동(ICMP페이지한테 작업 맡기기)
+                                    location.href = "icmp_frame.html";
+                                    break;
+                                case 6:
+                                    // SessionStoarge에 저장하고 TCP페이지로 이동(TCP페이지한테 작업 맡기기)
+                                    location.href = "tcp_frame.html";
+                                    break;
+                                case 17:
+                                    // SessionStoarge에 저장하고 UDP페이지로 이동(UDP페이지한테 작업 맡기기)
+                                    location.href = "udp_frame.html";
+                                    break;
+                            }
+                        }
+                    string=$("#IPVer input").val()+
+                        ","+$("#IP_HLEN input").val()+","+$("#IP_TOS input").val()
+                        +","+$("#IP_Total_Length input").val()+","+$("#IP_ID input").val()
+                        +","+$("#IP_Flags input").val()+","+$("#IP_TTL input").val()
+                        +","+$("#IP_Protocol input").val()+","+$("#IP_Checksum input").val()
+                        +","+$("#IP_SA input").val()+","+$("#IP_DA input").val();
+                        sessionStorage.setItem("key_ipHD", string); // END Point가 아닌 곳의 데이터는 참조받는 데이터로 사용되기 때문에 값이 정확해야한다.
+                        sessionStorage.setItem("key_ipHD_Data", $("#IP_Data input").val());
+                    }
+
+                    
+                }
+            }
+            </script>
+
+
+    </body>
+</html>

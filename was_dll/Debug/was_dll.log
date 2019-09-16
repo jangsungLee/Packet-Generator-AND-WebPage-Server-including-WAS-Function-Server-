@@ -1,0 +1,19 @@
+﻿  test.cpp
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(276): warning C4101: 'output_data' :참조되지 않은 지역 변수입니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(299): warning C4101: 'output_data' :참조되지 않은 지역 변수입니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(295): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(374): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(395): warning C4101: 'j' :참조되지 않은 지역 변수입니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(88): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(79): warning C4101: 'myIPADDR' :참조되지 않은 지역 변수입니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(256): warning C4244: '=': 'INT64'에서 'ULONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(356): warning C4244: '=': 'INT64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(369): warning C4244: '=': 'INT64'에서 'ULONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(376): warning C4244: '=': 'INT64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(391): warning C4244: '=': 'INT64'에서 'ULONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(398): warning C4244: '=': 'INT64'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(411): warning C4244: '=': 'INT64'에서 'ULONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\test.cpp(136): warning C4101: 'value' :참조되지 않은 지역 변수입니다.
+C:\Users\hoan1\source\repos\was_dll\was_dll\WebSocket_Encoding_HS.h(386): warning C4172: 지역 변수 또는 임시: output의 주소를 반환하고 있습니다.
+     C:\Users\hoan1\source\repos\was_dll\Debug\was_dll.lib 라이브러리 및 C:\Users\hoan1\source\repos\was_dll\Debug\was_dll.exp 개체를 생성하고 있습니다.
+  was_dll.vcxproj -> C:\Users\hoan1\source\repos\was_dll\Debug\was_dll.dll

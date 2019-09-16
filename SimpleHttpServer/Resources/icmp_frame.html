@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="kr" >
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="style_icmp.css">
+        <script src="jquery-3.4.1.min.js" charset="utf-8"></script>
+        <tag autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+        <link rel="stylesheet" href="fontawsome.css"> <!--this enabled when it can't access fontawesome web site-->
+    </head>
+    <body>
+        <div class="header">
+            <h2 class="logo" style="--tooltip-string: '제작자 : 안동대학교 정보통신공학과 15학번 김태훈\A  ';">ANU I.C.E Packet Maker</h2>
+            <input type="checkbox" id="chk">
+            <label for="chk" class="show-menu-btn">
+              <i class="fas fa-ellipsis-h"></i>
+            </label>
+                        
+            <ul class="menu">
+                <a href="ethernet_frame.html">ETHERNET헤더</a>
+                <a href="ip_frame.html">ip헤더</a>
+                <label for="chk" class="hide-menu-btn">
+                  <i class="fas fa-times"></i>
+                </label>    
+            </ul>
+        </div>
+        
+        <noscript>
+            <font color="white">
+            이 사이트의 기능을 모두 활성하기 위해서는 자바스크립트를 활성화 시킬 필요가 있습니다.
+            <a href="https://www.enable-javascript.com/ko/">브라우저에서 자바스크립트를 활성화하는 방법</a>을 참고하세요.
+            </font>
+        </noscript>
+                 
+
+         <form action="index.html" class="icmp_frame">
+            <h1>ICMP 헤더</h1>
+            
+
+            <div class="icmphd" id="ICMP_Type" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="0" maxlength="3" onkeydown="filterNumber(event)">
+                <span data-placeholder="ICMP Type"></span>
+            </div>
+
+            <div class="icmphd" id="ICMP_Code" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="1" maxlength="3" onkeydown="filterNumber(event)">
+                <span data-placeholder="ICMP Code"></span>
+            </div>
+
+            <div class="icmphd" id="ICMP_Checksum" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" id="2" maxlength="6" id="CHECKSUM" onkeydown="filterNumberH(event)">
+                <span data-placeholder="ICMP Checksum"></span>
+            </div>
+
+            <div class="icmphd" id="ICMP_ID" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" id="3" maxlength="6" id="CHECKSUM" onkeydown="filterNumberH(event)">
+                <span data-placeholder="ICMP Identification"></span>
+            </div>
+
+            <div class="icmphd" id="ICMP_Seq" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" id="4" maxlength="6" id="CHECKSUM" onkeydown="filterNumberH(event)">
+                <span data-placeholder="ICMP Sequence number"></span>
+            </div>
+
+            <div class="icmphd" id="ICMP_Data" style="--tooltip-string: 'ICMP 데이터를 입력하시면 됩니다.\A 예를 들어 ICMP Request Message를 만들어서 입력한 데이터가 그대로 응답을 하는지 관찰을 해보세요.\A  \A  \A  그리고 만약 숫자를 바이트값으로 입력하고 싶다면 \'0x\'와 함께 16진수로 입력하시면 됩니다.\A  ';">
+                <input type="text">
+                <span data-placeholder="ICMP Data"></span>
+            </div>
+
+            <input type="button" class="frame_submit" value="확인" onclick="sumit_button()">
+        </form>
+
+            <script type="text/javascript">
+                var WAS_PORTNUM="3001";
+                var WebSocket_URL= "ws://127.0.0.1:"+WAS_PORTNUM//"ws://windowsdesktop.iptime.org:8080";
+                $(document).ready(function() {
+                   // if ( (navigator.userAgent.toLowerCase().search( "edge/" ) > -1 ||
+                   //  /*IE*/(navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (navigator.userAgent.toLowerCase().indexOf("msie") != -1)))
+                   //   alert("해당 브라우저는 정상적으로 동작하지 않을 수 있습니다.");
+
+                    
+                    if(window.location.hostname.length>0)
+                      WebSocket_URL="ws://"+window.location.hostname+":"+WAS_PORTNUM;
+
+                    fill_INPUT_Field();
+
+                    if($("#ICMP_Type input").val().length>0)
+                    {
+                        $("#ICMP_Type input").focus();//alert("연결");
+                        $("#ICMP_Type input").focus();
+                    }
+                    if($("#ICMP_Code input").val().length>0)
+                    {
+                        $("#ICMP_Code input").focus();
+                        $("#ICMP_Code input").focus();
+                    }
+                    if($("#ICMP_Checksum input").val().length>0)
+                    {
+                        $("#ICMP_Checksum input").focus();
+                        $("#ICMP_Checksum input").focus();
+                    }
+                    if($("#ICMP_ID input").val().length>0)
+                    {
+                        $("#ICMP_ID input").focus();
+                        $("#ICMP_ID input").focus();
+                    }
+                    if($("#ICMP_Seq input").val().length>0)
+                    {
+                        $("#ICMP_Seq input").focus();
+                        $("#ICMP_Seq input").focus();
+                    }
+                    if($("#ICMP_Data input").val().length>0)
+                    {
+                        $("#ICMP_Data input").focus();
+                        $("#ICMP_Data input").focus();
+                    }
+            });
+
+                $(".icmphd input").on("focus",function(){
+                  $(this).addClass("focus");
+                });
+          
+                $(".icmphd input").on("blur",function(){
+                  if($(this).val() == "")
+                  $(this).removeClass("focus");
+                });
+          
+                $(".icmphd input").keydown(function(key) {
+                if (key.keyCode == 13) {
+                    var str=sumit_button(parseInt(key.target.id));
+                    $(str).select();
+                }
+            });
+
+            function fill_INPUT_Field()
+            {
+                var icmp_num_str;
+
+                if(sessionStorage.getItem("key_icmpHD")!=null)
+                {
+                    icmp_num_str=sessionStorage.getItem("key_icmpHD").replace(/(\s*)/g,"");
+                    icmp_num_str=icmp_num_str.split(",");
+                    $("#ICMP_Type input").val(icmp_num_str[0]);
+                    $("#ICMP_Code input").val(icmp_num_str[1]);
+                    $("#ICMP_Checksum input").val(icmp_num_str[2]);
+                    $("#ICMP_ID input").val(icmp_num_str[3]);
+                    $("#ICMP_Seq input").val(icmp_num_str[4]);
+                    $("#ICMP_Data input").val(sessionStorage.getItem("key_icmpHD_Data"));
+                }
+            }
+
+            var prev_keyID;
+            function filterNumber(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+             else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+             {
+                 // None
+             }
+             else 
+                event.preventDefault();
+                
+             prev_keyID=keyID;
+            }
+            function filterNumberH(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+              else if(event.target.value.length==1 && keyID==88) // check whether it will be '0x'
+                {
+                    // None
+                }
+                else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+                {
+                    // None
+                }
+                else if(event.target.value.slice(0,2)=="0x" && (64<keyID && keyID<71)) // 16진수로 인식
+                {
+                    event.target.value = event.target.value.replace(/[a]/g, "A");
+                    event.target.value = event.target.value.replace(/[b]/g, "B");
+                    event.target.value = event.target.value.replace(/[c]/g, "C");
+                    event.target.value = event.target.value.replace(/[d]/g, "D");
+                    event.target.value = event.target.value.replace(/[e]/g, "E");
+                    event.target.value = event.target.value.replace(/[f]/g, "F");
+                    event.target.value="0x"+event.target.value.slice(2,event.target.value.length).replace(/[^0-9 | ^A-F]/g, "")
+                    //alert(event.target.value.slice(2,event.target.value.length).replace(/[^0-9]/g, ""));
+                }
+                else
+                    event.preventDefault();
+                
+              
+                /*if(event.target.value.slice(0,2)=="0x" || prev_keyID==17) // 16진수로 인식, Ctrl+v를 대비해서 16진수로 준비시킴
+                {
+                    $("#"+event.target.getAttribute('id')).attr("maxlength",6);
+                    //alert("16진수로 인식합니다.");
+                }
+                else // 10진수로 인식
+                {
+                    $("#"+event.target.getAttribute('id')).attr("maxlength",5);
+                    //alert("10진수로 인식합니다.");
+                }*/
+             prev_keyID=keyID;
+            }
+
+            var ws;
+            var isWebSocketConnected=false; // 페이지를 벗어날때, WebSocket종료시 엣지브라우저에서 'WebSocket Error'가 일어나는 것을 해결하기 위한 데이터
+            var isWindowUnload=false;
+            var isToldError_when_occured=false;
+            window.onbeforeunload=function(e){
+                isWindowUnload=true;
+                ws.close();
+                //return '페이지를 나가시겠습니까?';
+            };
+
+            function WebSocket_Connect()
+            {
+                ws=new WebSocket(WebSocket_URL);
+                ws.onopen = WebSocket_onOpen;
+                ws.onmessage = Websocket_onMessage;
+                ws.onclose = WebSocket_onClose;
+                ws.onerror = WebSocket_onError;
+                isToldError_when_occured=false;
+            }
+            function WebSocket_onOpen(e)
+            {
+                //txtRecv.append( "connected<br>" );
+                isWebSocketConnected=true;
+                //alert("connected");
+
+                
+                ws.send(strTobyte_buffer); // 처음 연결할때 데이터를 전송하는 부분
+            }
+
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function(e) {
+                alert(e.srcElement.result)
+            });
+            function Websocket_onMessage(e)
+            {
+                if(e.data instanceof Blob)
+                    reader.readAsText(e.data);
+                else
+                    alert(e.data);
+            }
+            function WebSocket_onClose(e)
+            {
+                isWebSocketConnected=false;
+                //alert("closed");
+            }
+            function WebSocket_onError(e)
+            {
+                if(!isWebSocketConnected && !isToldError_when_occured)
+                {
+                    alert("There are some problems at WAS.\nPlease retry later.");
+                    isToldError_when_occured=true;
+                }
+                isWebSocketConnected=false;
+            }
+
+            var isAllInput=false;
+            function checkAllInput(index)
+            {
+                switch(index)
+                {
+                case 0:
+                    if($("#ICMP_Type input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ICMP Type을 입력해주세요");
+                        return "#ICMP_Type input";
+                    }
+                case 1:
+                    if($("#ICMP_Code input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ICMP Code를 입력해주세요");
+                        return "#ICMP_Code input";
+                    }
+                case 2:
+                    if($("#ICMP_Checksum input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ICMP Checksum을 입력해주세요");
+                        return "#ICMP_Checksum input";
+                    }
+                    else if(isNaN(parseInt($("#ICMP_Checksum input").val())))
+                    {
+                        isAllInput=false;
+                        alert("ICMP Checksum을 제대로 입력해주세요");
+                        return "#ICMP_Checksum input";
+                    }
+                case 3:
+                    if($("#ICMP_ID input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ICMP Identification을 입력해주세요");
+                        return "#ICMP_ID input";
+                    }
+                    else if(isNaN(parseInt($("#ICMP_ID input").val())))
+                    {
+                        isAllInput=false;
+                        alert("ICMP Identification을 제대로 입력해주세요");
+                        return "#ICMP_ID input";
+                    }
+                case 4:
+                    if($("#ICMP_Seq input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ICMP Sequence Number을 입력해주세요");
+                        return "#ICMP_Seq input";
+                    }
+                    else if(isNaN(parseInt($("#ICMP_Seq input").val())))
+                    {
+                        isAllInput=false;
+                        alert("ICMP Sequence Number을 제대로 입력해주세요");
+                        return "#ICMP_Seq input";
+                    }
+                }
+
+                if(index!=0)
+                {
+                    var return_value;
+                    if((return_value=checkAllInput(0))!=null)
+                        return return_value;
+                    else
+                    {
+                        isAllInput=true;
+
+                    }
+                }
+                else
+                {
+                        isAllInput=true;
+                }
+                
+                return null;
+            }
+
+            var strTobyte_buffer_len=14+20+8;
+            var strTobyte_buffer=new Uint8Array(strTobyte_buffer_len);
+            function numTobyte(value, dst_index, byte_size)
+            {
+                var i;
+                for(i=0;i<byte_size;i++)
+                {
+                    strTobyte_buffer[dst_index + byte_size - (i + 1)]=((value>>(8*i))&0xff);
+                }
+            }
+            function sum_for_checksum(dst_index, size)
+            {
+                var sum = new Uint32Array(1);
+                var i;
+                for (i = 0, sum[0]= 0; i < size; i += 2)
+                {
+                    sum[0] += ((strTobyte_buffer[dst_index + i]<<8) | ((i + 1<size)?strTobyte_buffer[dst_index + i + 1]:0));
+                    while ((sum[0] & 0xffff0000))
+                        sum[0] = ((sum[0] & 0xffff0000) >> 16) + (sum[0] & 0xffff);
+
+                }
+                return sum[0];
+            }
+            function strTonum_etherHD()
+            {
+                var num_str;
+                var mac_address_str;
+                var i;
+
+                if(sessionStorage.getItem("key_etherHD")!=null)
+                {
+                    num_str=sessionStorage.getItem("key_etherHD").replace(/(\s*)/g,"").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("이더넷 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+
+
+                mac_address_str=num_str[0].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[i]=parseInt("0x"+mac_address_str[i]);
+                mac_address_str=num_str[1].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[6+i]=parseInt("0x"+mac_address_str[i]);
+                numTobyte(parseInt(num_str[2]),12, 2);
+            }
+            var ip_num_str;
+            function strTonum_ipHD()
+            {
+                var ip_address_str;
+                var i;
+                
+                if(sessionStorage.getItem("key_ipHD")!=null)
+                {
+                    ip_num_str=sessionStorage.getItem("key_ipHD").replace(/(\s*)/g,"").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("IP 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+                strTobyte_buffer[14]=((parseInt(ip_num_str[0])<<4) | parseInt(ip_num_str[1]));
+                strTobyte_buffer[15]=parseInt(ip_num_str[2]);
+                numTobyte(parseInt(ip_num_str[3]), 16, 2);
+                numTobyte(parseInt(ip_num_str[4]), 18, 2);
+                numTobyte(parseInt(ip_num_str[5]), 20, 2);
+                strTobyte_buffer[22]=parseInt(ip_num_str[6]);
+                strTobyte_buffer[23]=parseInt(ip_num_str[7]);
+                numTobyte(parseInt(ip_num_str[8]), 24, 2);
+                ip_address_str=ip_num_str[9].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[26+i]=parseInt(ip_address_str[i]);
+                ip_address_str=ip_num_str[10].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[30+i]=parseInt(ip_address_str[i]);
+            }
+            function strTonum_icmpHD()
+            {
+                var num_str;
+                var i;
+                
+                if(sessionStorage.getItem("key_ipHD")!=null)
+                {
+                    num_str=($("#ICMP_Type input").val()+","+$("#ICMP_Code input").val()
+                        +","+$("#ICMP_Checksum input").val()+","+$("#ICMP_ID input").val()+","+$("#ICMP_Seq input").val()).split(",");
+                    strTobyte_buffer[34]=parseInt(num_str[0]);
+                    strTobyte_buffer[35]=parseInt(num_str[1]);
+                    numTobyte(parseInt(num_str[2]),36,2);
+                    numTobyte(parseInt(num_str[3]),38,2);
+                    numTobyte(parseInt(num_str[4]),40,2);
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("IP 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+            }
+            function sumit_button(index)
+            {
+                var i;
+                var sum=new Uint32Array(1);
+                
+                if(index)
+                    return_value=checkAllInput(index);
+                else
+                    return_value=checkAllInput(0);
+                
+                
+                if(!isAllInput)
+                    return return_value;
+                else
+                {
+                    strTonum_etherHD();
+                    if(isAllInput)
+                        strTonum_ipHD();
+                    if(isAllInput)
+                        strTonum_icmpHD();
+                    if(isAllInput)
+                    {
+                        if($("#ICMP_Data input").val().length>0)
+                        {
+                            var checksum_uint16=new Uint16Array(1);
+                            var data_byte_buffer;
+                            var ip_total_length;
+
+
+
+                            var Data_var;
+                            var STRhex;
+
+                            if($("#ICMP_Data input").val().split("0x").length>1)
+                            {
+
+                                STRhex=$("#ICMP_Data input").val().split("0x");
+                                for(i=0;i<STRhex.length;i++)
+                                    STRhex[i]=STRhex[i].replace(/(\s*)/g,"");
+                                Data_var=new Array(STRhex.length-1);
+                                for(i=1;i<STRhex.length;i++)
+                                    Data_var[i-1]=STRhex[i];
+                                        
+                                    //String길이가 3이상을 잘라서 이동시키는 작업
+                                var Uint8Array_length, k;
+                                for(i=0,Uint8Array_length=0;i<Data_var.length;i++)
+                                    Uint8Array_length+=(parseInt(Data_var[i].length/2)+parseInt(Data_var[i].length%2));
+                                STRhex=new Uint8Array(Uint8Array_length);
+                                for(i=0,Uint8Array_length=0;i<Data_var.length;i++)
+                                {   
+                                    if(Data_var[i].length<2)
+                                    {
+                                        if(isNaN(parseInt("0x"+Data_var[i].slice(0,1))))
+                                        {
+                                            alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   2");
+                                            return;
+                                        }
+                                        STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(0,1));
+                                        Uint8Array_length++;
+                                    }
+                                    else
+                                    {
+                                        for(k=0;k<parseInt(Data_var[i].length/2);k++)
+                                        {
+                                            if(isNaN(parseInt("0x"+Data_var[i].slice(k*2,k*2+2))))
+                                            {
+                                                alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   2");
+                                                return;
+                                            }
+
+                                            STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(k*2,k*2+2));
+                                            Uint8Array_length++;
+                                        }
+
+                                        if(Data_var[i].length%2==1) // 홀수길이일때 마지막 값 처리
+                                        {
+                                            if(isNaN(parseInt("0x"+Data_var[i].slice(k*2,k*2+1))))
+                                            {
+                                                alert("데이터를 바이너리 값을 입력하려면 값을 제대로 입력해주세요.   1   -> "+STRhex[Uint8Array_length+k]);
+                                                return;
+                                            }
+                                            STRhex[Uint8Array_length]=parseInt("0x"+Data_var[i].slice(k*2,k*2+1));
+                                            Uint8Array_length++;
+                                        }
+                                    }                         
+                                }
+
+                                Data_var=STRhex;
+                                        
+                            }
+                            else
+                            {
+                                Data_var=new Uint8Array($("#ICMP_Data input").val().length);
+                                for(i=0;i<$("#ICMP_Data input").val().length;i++)
+                                    Data_var[i]=$("#ICMP_Data input").val().charCodeAt(i);
+                            }
+
+                            data_byte_buffer=new Uint8Array(strTobyte_buffer_len+Data_var.length);
+
+                            for(i=0;i<strTobyte_buffer_len;i++)
+                                data_byte_buffer[i]=strTobyte_buffer[i];
+                            for(i=0;i<Data_var.length;i++)
+                                data_byte_buffer[strTobyte_buffer_len+i]=Data_var[i];
+                            strTobyte_buffer=data_byte_buffer;
+
+                            // ICMP Checksum
+                            if(strTobyte_buffer[36]==0 && strTobyte_buffer[37]==0)
+                            {
+                                sum[0] = sum_for_checksum(34, 8);
+                                sum[0] += sum_for_checksum(42, Data_var.length);
+                                while ((sum[0] & 0xffff0000))
+                                    sum[0] = ((sum[0] & 0xffff0000) >> 16) + (sum[0] & 0xffff);
+                                checksum_uint16[0]=~sum[0];
+                                $("#ICMP_Checksum input").val("0x"+checksum_uint16[0].toString(16));
+                                numTobyte(checksum_uint16[0], 36, 2);
+                            }
+                            else
+                                numTobyte(parseInt($("#ICMP_Checksum input").val()), 36, 2);
+                                
+                            // IP Total Length
+                            if(strTobyte_buffer[16]==0 && strTobyte_buffer[17]==0)
+                            {
+                                ip_total_length=strTobyte_buffer.length - 14;
+                                sessionStorage.setItem("key_ipHD_total_len", "1,1,"+ip_total_length);
+                                numTobyte(ip_total_length, 16, 2);
+                            }
+                            /*else
+                                numTobyte(parseInt(ip_num_str[3]), 16, 2);*/
+                                
+                            // IP Checksum
+                            if(strTobyte_buffer[24]==0 && strTobyte_buffer[25]==0)
+                            {
+                                sum[0] = sum_for_checksum(14, strTobyte_buffer.length - 14);
+                                sum[0]=~sum[0];
+                                checksum_uint16[0]=sum[0];
+                                if(sessionStorage.getItem("key_ipHD_user_checksum").split(",")[0]=="1" )
+                                    sessionStorage.setItem("key_ipHD_user_checksum", "1,1,"+checksum_uint16[0]);
+                            }
+                            else
+                                checksum_uint16[0]=parseInt(ip_num_str[8]);
+                            numTobyte(checksum_uint16[0], 24, 2);
+
+
+
+                            console.log(strTobyte_buffer);
+
+                            if(!isWebSocketConnected)
+                            {
+                                WebSocket_Connect();
+                            }
+                                
+                            if(isWebSocketConnected)
+                            {
+                                ws.send(strTobyte_buffer);
+                            }
+                        }
+
+                        
+                        sessionStorage.setItem("key_icmpHD",$("#ICMP_Type input").val()+","+$("#ICMP_Code input").val()
+                        +","+$("#ICMP_Checksum input").val()+","+$("#ICMP_ID input").val()+","+$("#ICMP_Seq input").val());
+                        sessionStorage.setItem("key_icmpHD_Data",$("#ICMP_Data input").val());
+                    }
+                }
+            }
+            </script>
+
+
+    </body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="kr" >
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="style_arp.css">
+        <script src="jquery-3.4.1.min.js" charset="utf-8"></script>
+        <tag autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+        <link rel="stylesheet" href="fontawsome.css"> <!--this enabled when it can't access fontawesome web site-->
+
+    </head>
+    <body>
+        <div class="header">
+            <h2 class="logo" style="--tooltip-string: '제작자 : 안동대학교 정보통신공학과 15학번 김태훈\A  ';">ANU I.C.E Packet Maker</h2>
+            <input type="checkbox" id="chk">
+            <label for="chk" class="show-menu-btn">
+              <i class="fas fa-ellipsis-h"></i>
+            </label>
+                    
+            <ul class="menu">
+                <a href="ethernet_frame.html">ETHERNET헤더</a>
+                <label for="chk" class="hide-menu-btn">
+                  <i class="fas fa-times"></i>
+                </label>    
+            </ul>
+        </div>
+
+        <noscript>
+            <font color="white">
+             이 사이트의 기능을 모두 활성하기 위해서는 자바스크립트를 활성화 시킬 필요가 있습니다.
+            <a href="https://www.enable-javascript.com/ko/">브라우저에서 자바스크립트를 활성화하는 방법</a>을 참고하세요.
+            </font>
+        </noscript>
+                        
+
+         <form action="index.html" class="arp-form">
+            <h1>ARP 프레임</h1>
+            
+            <div class="arphd" id="ARP_HW_Type" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" id="0" maxlength="2" onkeydown="filterNumberH(event)">
+                <span data-placeholder="ARP Hardware Type"></span>
+                
+            </div>
+
+            <div class="arphd" id="ARP_Protocol_Type" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" id="1" maxlength="6" onkeydown="filterNumberH(event)">
+                <span data-placeholder="ARP Protocol Type"></span>
+            </div>
+
+            <div class="arphd" id="ARP_HW_Len" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" id="2" maxlength="2" onkeydown="filterNumberH(event)">
+                <span data-placeholder="ARP Hardware Length"></span>
+            </div>
+
+            <div class="arphd" id="ARP_Protocol_Len" style="--tooltip-string: '10진수는 4660과 같이 평상시처럼 사용하고\A 16진수는 \'0x\'를 붙혀서 0x1234와 같이 사용하면 됩니다\A  ';">
+                <input type="text" id="3" maxlength="2" onkeydown="filterNumberH(event)">
+                <span data-placeholder="ARP Protocol Length"></span>
+            </div>
+
+            <div class="arphd" id="ARP_OPcode" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="4" maxlength="1" onkeydown="filterNumber(event)">
+                <span data-placeholder="ARP Operation Code"></span>
+            </div>
+
+            <div class="arphd" id="Sender_HW_ADR" style="--tooltip-string: '16진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="5" maxlength="17" onkeydown="filterMAC(event)">
+                <span data-placeholder="Sender Hardware Address"></span>
+            </div>
+
+            <div class="arphd" id="Sender_Protocol_ADR" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="6" maxlength="15" onkeydown="filterIP(event)">
+                <span data-placeholder="Sender Protocol Address"></span>
+            </div>
+
+            <div class="arphd" id="Target_HW_ADR" style="--tooltip-string: '16진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="7" maxlength="17" onkeydown="filterMAC(event)">
+                <span data-placeholder="Target Hardware Address"></span>
+            </div>
+
+            <div class="arphd" id="Target_Protocol_ADR" style="--tooltip-string: '10진수를 사용하여 입력해주세요.\A  ';">
+                <input type="text" id="8" maxlength="15" onkeydown="filterIP(event)">
+                <span data-placeholder="Target Protocol Address"></span>
+            </div>
+            <input type="button" class="frame_submit" value="확인" onclick="sumit_button()">
+        </form>
+
+            <script type="text/javascript">
+                var WAS_PORTNUM="3001";
+                var WebSocket_URL= "ws://127.0.0.1:"+WAS_PORTNUM//"ws://windowsdesktop.iptime.org:8080";
+                $(document).ready(function() {
+                   // if ( (navigator.userAgent.toLowerCase().search( "edge/" ) > -1 ||
+                   //  /*IE*/(navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (navigator.userAgent.toLowerCase().indexOf("msie") != -1)))
+                   //   alert("해당 브라우저는 정상적으로 동작하지 않을 수 있습니다.");
+
+                    if(window.location.hostname.length>0)
+                        WebSocket_URL="ws://"+window.location.hostname+":"+WAS_PORTNUM;
+                
+                    fill_INPUT_Field();
+
+                    if($("#ARP_HW_Type input").val().length>0)
+                    {
+                        $("#ARP_HW_Type input").focus();//alert("연결");
+                        $("#ARP_HW_Type input").focus();
+                    }
+                    if($("#ARP_Protocol_Type input").val().length>0)
+                    {
+                        $("#ARP_Protocol_Type input").focus();
+                        $("#ARP_Protocol_Type input").focus();
+                    }
+                    if($("#ARP_HW_Len input").val().length>0)
+                    {
+                        $("#ARP_HW_Len input").focus();
+                        $("#ARP_HW_Len input").focus();
+                    }
+                    if($("#ARP_Protocol_Len input").val().length>0)
+                    {
+                        $("#ARP_Protocol_Len input").focus();
+                        $("#ARP_Protocol_Len input").focus();
+                    }
+                    if($("#ARP_OPcode input").val().length>0)
+                    {
+                        $("#ARP_OPcode input").focus();//alert("연결");
+                        $("#ARP_OPcode input").focus();
+                    }
+                    if($("#Sender_HW_ADR input").val().length>0)
+                    {
+                        $("#Sender_HW_ADR input").focus();
+                        $("#Sender_HW_ADR input").focus();
+                    }
+                    if($("#Sender_Protocol_ADR input").val().length>0)
+                    {
+                        $("#Sender_Protocol_ADR input").focus();
+                        $("#Sender_Protocol_ADR input").focus();
+                    }
+                    if($("#Target_HW_ADR input").val().length>0)
+                    {
+                        $("#Target_HW_ADR input").focus();
+                        $("#Target_HW_ADR input").focus();
+                    }
+                    if($("#Target_Protocol_ADR input").val().length>0)
+                    {
+                        $("#Target_Protocol_ADR input").focus();
+                        $("#Target_Protocol_ADR input").focus();
+                    }
+            });
+
+                $(".arphd input").on("focus",function(){
+                  $(this).addClass("focus");
+                });
+          
+                $(".arphd input").on("blur",function(){
+                  if($(this).val() == "")
+                  $(this).removeClass("focus");
+                });
+
+            $(".arphd input").keydown(function(key) {
+            if (key.keyCode == 13) {
+                var str=sumit_button(parseInt(key.target.id));
+                $(str).select();
+            }
+            });
+          
+            function fill_INPUT_Field()
+            {
+                var arp_num_str;
+
+                if(sessionStorage.getItem("key_arpHD")!=null)
+                {
+                    arp_num_str=sessionStorage.getItem("key_arpHD").replace(/(\s*)/g,"").split(",");
+                    $("#ARP_HW_Type input").val(arp_num_str[0]);
+                    $("#ARP_Protocol_Type input").val(arp_num_str[1]);
+                    $("#ARP_HW_Len input").val(arp_num_str[2]);
+                    $("#ARP_Protocol_Len input").val(arp_num_str[3]);
+                    $("#ARP_OPcode input").val(arp_num_str[4]);
+                    $("#Sender_HW_ADR input").val(arp_num_str[5]);
+                    $("#Sender_Protocol_ADR input").val(arp_num_str[6]);
+                    $("#Target_HW_ADR input").val(arp_num_str[7]);
+                    $("#Target_Protocol_ADR input").val(arp_num_str[8]);
+                }
+            }
+            var prev_keyID;
+            function filterNumber(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+             else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+             {
+                 // None
+             }
+             else 
+                event.preventDefault();
+                
+             prev_keyID=keyID;
+            }
+            function filterNumberH(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106)) // 0~9
+              {
+                  // None
+              }
+              else if(event.target.value.length==1 && keyID==88) // check whether it will be '0x'
+                {
+                    // None
+                }
+                else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+                {
+                    // None
+                }
+                else if(event.target.value.slice(0,2)=="0x" && (64<keyID && keyID<71)) // 16진수로 인식
+                {
+                    event.target.value = event.target.value.replace(/[a]/g, "A");
+                    event.target.value = event.target.value.replace(/[b]/g, "B");
+                    event.target.value = event.target.value.replace(/[c]/g, "C");
+                    event.target.value = event.target.value.replace(/[d]/g, "D");
+                    event.target.value = event.target.value.replace(/[e]/g, "E");
+                    event.target.value = event.target.value.replace(/[f]/g, "F");
+                    event.target.value="0x"+event.target.value.slice(2,event.target.value.length).replace(/[^0-9 | ^A-F]/g, "")
+                    //alert(event.target.value.slice(2,event.target.value.length).replace(/[^0-9]/g, ""));
+                }
+                else
+                    event.preventDefault();
+                 
+              
+
+                prev_keyID=keyID;
+            }
+
+            function filterMAC(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+              {
+                    // None
+              }
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106) || (64<keyID && keyID<71))
+              {
+                  event.target.value = event.target.value.replace(/[a]/g, "A");
+                  event.target.value = event.target.value.replace(/[b]/g, "B");
+                  event.target.value = event.target.value.replace(/[c]/g, "C");
+                  event.target.value = event.target.value.replace(/[d]/g, "D");
+                  event.target.value = event.target.value.replace(/[e]/g, "E");
+                  event.target.value = event.target.value.replace(/[f]/g, "F");
+                  event.target.value = event.target.value.replace(/[^0-9 | ^A-F | ^-]/g, "");
+              }
+                else
+                    event.preventDefault();
+                    
+              switch(event.target.value.length)
+              {
+                case 2:
+                    event.target.value=event.target.value+"-";
+                    break;
+                case 5:
+                    event.target.value=event.target.value+"-";
+                    break
+                case 8:
+                    event.target.value=event.target.value+"-";
+                    break
+                case 11:
+                    event.target.value=event.target.value+"-";
+                    break
+                case 14:
+                    event.target.value=event.target.value+"-";
+                    break
+              }
+              prev_keyID=keyID;
+            }
+            function filterIP(event)
+            {
+              event = event || window.event;
+              var keyID = (event.which) ? event.which : event.keyCode;
+              if ( keyID == 8 || keyID == 9 || keyID == 46 || keyID == 37 || keyID == 39)
+                  return;
+              else if(prev_keyID==17 && (keyID==65 || keyID==67 || keyID==86 ||  keyID==88 ||  keyID==90)) // Ctrl+(key)
+              {
+                  // None
+              }
+              else if((47<keyID && keyID<58) || (95<keyID && keyID<106) || keyID==190)
+              {
+                  // None
+              }
+              else 
+                event.preventDefault();
+             prev_keyID=keyID;
+            }
+
+            var ws;
+            var isWebSocketConnected=false; // 페이지를 벗어날때, WebSocket종료시 엣지브라우저에서 'WebSocket Error'가 일어나는 것을 해결하기 위한 데이터
+            var isWindowUnload=false;
+            var isToldError_when_occured=false;
+            window.onbeforeunload=function(e){
+                isWindowUnload=true;
+                ws.close();
+                //return '페이지를 나가시겠습니까?';
+            };
+
+            function WebSocket_Connect()
+            {
+                ws=new WebSocket(WebSocket_URL);
+                ws.onopen = WebSocket_onOpen;
+                ws.onmessage = Websocket_onMessage;
+                ws.onclose = WebSocket_onClose;
+                ws.onerror = WebSocket_onError;
+                isToldError_when_occured=false;
+            }
+            function WebSocket_onOpen(e)
+            {
+                //txtRecv.append( "connected<br>" );
+                isWebSocketConnected=true;
+                //alert("connected");
+
+                
+                ws.send(strTobyte_buffer); // 처음 연결할때 데이터를 전송하는 부분
+            }
+
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function(e) {
+                alert(e.srcElement.result)
+            });
+            function Websocket_onMessage(e)
+            {
+                if(e.data instanceof Blob)
+                    reader.readAsText(e.data);
+                else
+                    alert(e.data);
+            }
+            function WebSocket_onClose(e)
+            {
+                isWebSocketConnected=false;
+                //alert("closed");
+            }
+            function WebSocket_onError(e)
+            {
+                if(!isWebSocketConnected && !isToldError_when_occured)
+                {
+                    alert("There are some problems at WAS.\nPlease retry later.");
+                    isToldError_when_occured=true;
+                }
+                isWebSocketConnected=false;
+            }
+
+            
+            var isAllInput=false;
+            function checkAllInput(index)
+            {
+                switch(index)
+                {
+                case 0:
+                    if($("#ARP_HW_Type input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ARP Hardware Type을 입력해주세요");
+                        return "#ARP_HW_Type input";
+                    }
+                case 1:
+                    if($("#ARP_Protocol_Type input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ARP_Protocol_Type을 입력해주세요");
+                        return "#ARP_Protocol_Type input";
+                    }
+                    else if(isNaN(parseInt($("#ARP_Protocol_Type input").val())))
+                    {
+                        isAllInput=false;
+                        alert("ARP_Protocol_Type를 제대로 입력해주세요");
+                        return "#ARP_Protocol_Type input";
+                    }
+                case 2:
+                    if($("#ARP_HW_Len input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ARP Hardware Length을 입력해주세요");
+                        return "#ARP_HW_Len input";
+                    }
+                case 3:
+                    if($("#ARP_Protocol_Len input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ARP Protocol Length을 입력해주세요");
+                        return "#ARP_Protocol_Len input";
+                    }
+                case 4:
+                    if($("#ARP_OPcode input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("ARP Operation Code을 입력해주세요");
+                        return "#ARP_OPcode input";
+                    }
+                case 5:
+                    if($("#Sender_HW_ADR input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("Sender Hardware Address을 입력해주세요");
+                        return "#Sender_HW_ADR input";
+                    }
+                    else if($("#Sender_HW_ADR input").val().split("-").length!=6)
+                    {
+                        isAllInput=false;
+                        alert("Sender Hardware Address을 제대로 입력해주세요");
+                        return "#Sender_HW_ADR input";
+                    }
+                case 6:
+                    if($("#Sender_Protocol_ADR input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("Sender Protocol Address을 입력해주세요");
+                        return "#Sender_Protocol_ADR input";
+                    }
+                    else if($("#Sender_Protocol_ADR input").val().split(".").length!=4)
+                    {
+                        isAllInput=false;
+                        alert("Sender Protocol Address을 제대로 입력해주세요");
+                        return "#Sender_Protocol_ADR input";
+                    }
+                case 7:
+                    if($("#Target_HW_ADR input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("Target Hardware Address을 입력해주세요");
+                        return "#Target_HW_ADR input";
+                    }
+                    else if($("#Target_HW_ADR input").val().split("-").length!=6)
+                    {
+                        isAllInput=false;
+                        alert("Target Hardware Address을 제대로 입력해주세요");
+                        return "#Target_HW_ADR input";
+                    }
+                case 8:
+                    if($("#Target_Protocol_ADR input").val().length<1)
+                    {
+                        isAllInput=false;
+                        alert("Target Protocol Address을 입력해주세요");
+                        return "#Target_Protocol_ADR input";
+                    }
+                    else if($("#Target_Protocol_ADR input").val().split(".").length!=4)
+                    {
+                        isAllInput=false;
+                        alert("Target Protocol Address을 제대로 입력해주세요");
+                        return "#Target_Protocol_ADR input";
+                    }
+                }
+
+                if(index!=0)
+                {
+                    var return_value;
+                    if((return_value=checkAllInput(0))!=null)
+                        return return_value;
+                    else
+                    {
+                        isAllInput=true;
+                    }
+                }
+                else
+                {
+                        isAllInput=true;
+                }
+
+                return null;
+            }
+
+            var strTobyte_buffer_len=14+28;
+            var strTobyte_buffer=new Uint8Array(strTobyte_buffer_len);
+            function numTobyte(value, dst_index, byte_size)
+            {
+                var i;
+                for(i=0;i<byte_size;i++)
+                {
+                    strTobyte_buffer[dst_index + byte_size - (i + 1)]=((value>>(8*i))&0xff);
+                }
+            }
+            function strTonum_etherHD()
+            {
+                var num_str;
+                var mac_address_str;
+                var i;
+
+
+                if(sessionStorage.getItem("key_etherHD")!=null)
+                {
+                    num_str=sessionStorage.getItem("key_etherHD").replace(/(\s*)/g,"").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("이더넷 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+
+
+                mac_address_str=num_str[0].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[i]=parseInt("0x"+mac_address_str[i]);
+                mac_address_str=num_str[1].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[6+i]=parseInt("0x"+mac_address_str[i]);
+                numTobyte(parseInt(num_str[2]),12, 2);
+            }
+            function strTonum_arpHD()
+            {
+                var arp_num_str;
+                var ip_address_str;
+                var mac_address_str;
+                var i;
+
+                if(sessionStorage.getItem("key_etherHD")!=null)
+                {
+                    num_str=sessionStorage.getItem("key_etherHD").replace(/(\s*)/g,"").split(",");
+                    isAllInput=true;
+                }
+                else
+                {
+                    alert("이더넷 헤더를 작성해주세요.");
+                    isAllInput=false;
+                    return;
+                }
+
+                
+                arp_num_str=($("#ARP_HW_Type input").val()+","+$("#ARP_Protocol_Type input").val()+","+$("#ARP_HW_Len input").val()
+                +","+$("#ARP_Protocol_Len input").val()+","+$("#ARP_OPcode input").val()+","+$("#Sender_HW_ADR input").val()
+                +","+$("#Sender_Protocol_ADR input").val()+","+$("#Target_HW_ADR input").val()+","+$("#Target_Protocol_ADR input").val()).split(",");
+                numTobyte(parseInt(arp_num_str[0]),14,2);
+                numTobyte(parseInt(arp_num_str[1]),16,2);
+                strTobyte_buffer[18]=parseInt(arp_num_str[2]);
+                strTobyte_buffer[19]=parseInt(arp_num_str[3]);
+                numTobyte(parseInt(arp_num_str[4]),20,2);
+                mac_address_str=arp_num_str[5].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[22+i]=parseInt("0x"+mac_address_str[i]);
+                ip_address_str=arp_num_str[6].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[28+i]=parseInt(ip_address_str[i]);
+                mac_address_str=arp_num_str[7].split("-");
+                for(i=0;i<6;i++)
+                    strTobyte_buffer[32+i]=parseInt("0x"+mac_address_str[i]);
+                ip_address_str=arp_num_str[8].split(".");
+                for(i=0;i<4;i++)
+                    strTobyte_buffer[38+i]=parseInt(ip_address_str[i]);
+                
+
+            }
+            function sumit_button(index)
+            {
+                var i;
+                var return_value;
+                
+
+                if(index)
+                    return_value=checkAllInput(index);
+                else
+                    return_value=checkAllInput(0);
+                    
+                if(!isAllInput)
+                    return return_value;
+                else
+                {
+                    strTonum_etherHD();
+                    if(isAllInput)
+                    {
+                        strTonum_arpHD();
+
+                        if(!isWebSocketConnected)
+                        {
+                            WebSocket_Connect();
+                        }
+                                
+                        if(isWebSocketConnected)
+                        {
+                            ws.send(strTobyte_buffer);
+                        }
+                    }
+
+                }
+
+                sessionStorage.setItem("key_arpHD",($("#ARP_HW_Type input").val()+","+$("#ARP_Protocol_Type input").val()+","+$("#ARP_HW_Len input").val()
+                +","+$("#ARP_Protocol_Len input").val()+","+$("#ARP_OPcode input").val()+","+$("#Sender_HW_ADR input").val()
+                +","+$("#Sender_Protocol_ADR input").val()+","+$("#Target_HW_ADR input").val()+","+$("#Target_Protocol_ADR input").val()));
+            }
+            </script>
+
+
+    </body>
+</html>
